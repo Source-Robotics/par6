@@ -12,10 +12,10 @@ opens the page's Markdown, and turns your edit into a pull request.
 **Larger change, locally.**
 
 ```bash
-git clone https://github.com/Source-Robotics/PAR6-docs.git
-cd PAR6-docs
+git clone https://github.com/Source-Robotics/par6.git
+cd par6
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-.venv/bin/mkdocs serve        # http://127.0.0.1:8000/PAR6-docs/
+.venv/bin/mkdocs serve        # http://127.0.0.1:8000/par6/
 ```
 
 Edit under `docs/`, check the page in the browser, open a pull request. The repository's build check must pass.

@@ -2,15 +2,15 @@ site_name: Source Robotics Docs
 site_description: Documentation for the PAR6 robot arm, the Robot Control Box, its software and end effectors.
 # Where the site is published: the organisation's docs domain, this repository's path. Search engines take each page's
 # address from here, and the sitemap is built from it.
-site_url: https://docs.source-robotics.com/PAR6-docs/
+site_url: https://docs.source-robotics.com/par6/
 # The docs repository: the header card on unmapped pages, and the "edit this page" target.
-repo_url: https://github.com/Source-Robotics/PAR6-docs
-repo_name: Source-Robotics/PAR6-docs
+repo_url: https://github.com/Source-Robotics/par6
+repo_name: Source-Robotics/par6
 edit_uri: edit/main/docs/
 copyright: |
   &copy; 2026 <a href="https://source-robotics.com" target="_blank" rel="noopener">Source Robotics d.o.o.</a> ·
   Text and images <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> ·
-  Code examples <a href="https://github.com/Source-Robotics/PAR6-docs/blob/main/LICENSE-CODE" target="_blank" rel="noopener">MIT</a>
+  Code examples <a href="https://github.com/Source-Robotics/par6/blob/main/LICENSE-CODE" target="_blank" rel="noopener">MIT</a>
 
 theme:
   name: material

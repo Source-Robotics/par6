@@ -3,7 +3,7 @@
 The documentation of the PAR6 robot arm system by [Source Robotics](https://source-robotics.com): the arm, the Robot
 Control Box, programming and the real-time interface, the dashboard, end effectors, and simulation.
 
-**Read it at [docs.source-robotics.com/PAR6-docs](https://docs.source-robotics.com/PAR6-docs/).**
+**Read it at [docs.source-robotics.com/par6](https://docs.source-robotics.com/par6/).**
 
 ## What is in this repository
 
@@ -27,14 +27,14 @@ settings, and `overrides/` holds the theme changes.
 You need Python 3.11 or newer.
 
 ```bash
-git clone https://github.com/Source-Robotics/PAR6-docs.git
-cd PAR6-docs
+git clone https://github.com/Source-Robotics/par6.git
+cd par6
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/mkdocs serve
 ```
 
-Open `http://127.0.0.1:8000/PAR6-docs/`. The page reloads by itself when you save a file.
+Open `http://127.0.0.1:8000/par6/`. The page reloads by itself when you save a file.
 
 Every push and pull request runs `mkdocs build --strict`, which fails on a broken link or a missing page. Run it
 before you open a pull request.
