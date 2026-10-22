@@ -39,12 +39,57 @@ Open `http://127.0.0.1:8000/par6/`. The page reloads by itself when you save a f
 Every push and pull request runs `mkdocs build --strict`, which fails on a broken link or a missing page. Run it
 before you open a pull request.
 
-## Versions
+## Versions and releases
 
-Each release of the robot's runtime has its own version of the documentation. The version selector in the site's
-header switches between them. The versions are built with [mike](https://github.com/jimporter/mike) and kept in the
-`gh-pages` branch. Which runtime, firmware and hardware versions work together is on the site's
-*Versions & compatibility* page.
+Each minor release of the robot's runtime has its own version of the documentation, for example `0.9`. The version
+selector in the site's header switches between them. The versions are built with
+[mike](https://github.com/jimporter/mike) and kept in the `gh-pages` branch.
+
+**All version facts live in `versions.yml`, never in a page.** It holds:
+
+- `docs_version`: the runtime's `MAJOR.MINOR` these pages describe, which is also the name the version is published under
+- `runtime.tag`: the runtime release the generated pages come from
+- one entry per manual: document number, title, revision, status, publication date, what it applies to
+
+`hooks/versions.py` writes these into every manual's version box and into the list of documents on every About
+page. A malformed or missing fact stops the build.
+
+**Some pages are generated from the runtime repository.** They are the compatibility table, the runtime release
+notes, the error and event codes, and the telemetry tags. Their content is in `docs/includes/generated/`. Never edit
+those files by hand: `tools/sync_runtime.py` writes them from the runtime's tagged release, and only from the tag,
+never from uncommitted work.
+
+```bash
+.venv/bin/python tools/sync_runtime.py           # write them from the release in versions.yml
+.venv/bin/python tools/sync_runtime.py --check   # exit 1 if they are out of date
+```
+
+### When the runtime releases a new version
+
+1. **A patch release, for example 0.9.1:** set `runtime.tag` to `v0.9.1` and run `tools/sync_runtime.py`. Commit
+   and push. The `0.9` version is published again with the new generated pages.
+2. **A minor or major release, for example 0.10.0:**
+   1. Set `docs_version` to `"0.10"` and `runtime.tag` to `v0.10.0`, then run `tools/sync_runtime.py`.
+   2. Update the software guides for what changed, using the release's changelog section, and give each changed
+      guide a new revision letter in `versions.yml`, with a line in its About page's *Document history*.
+   3. Commit and push. The site publishes `0.10`, "latest" moves to it, and `0.9` stays as it was.
+
+### When a manual is revised
+
+Give it the next revision letter in `versions.yml`, for example `2026.A` to `2026.B`, and add a line to the
+*Document history* on its About page saying what changed. When the revision is published, set `status: published`
+and `published:` to the date.
+
+### Publishing
+
+`.github/workflows/publish.yml` publishes on every push to `main`. It runs a strict build first, then
+`mike deploy` for `docs_version` with the alias `latest`. In the repository's Settings, under Pages, the source must
+be "Deploy from a branch", branch `gh-pages`, folder `/ (root)`. Every push and pull request also runs
+`tools/test_tools.py` and a strict build (`.github/workflows/build.yml`).
+
+To preview the published versions locally, with the version selector, run `.venv/bin/mike serve`.
+
+Which runtime, firmware and hardware versions work together is on the site's *Versions & compatibility* page.
 
 ## Contributing
 

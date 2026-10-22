@@ -20,6 +20,13 @@ python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 Edit under `docs/`, check the page in the browser, open a pull request. The repository's build check must pass.
 
+Some content is not written in the pages, and an edit there would be lost:
+
+- **Version facts** such as document numbers, revisions and the runtime version live in `versions.yml`.
+- **The generated reference content** comes from the runtime repository's release: the compatibility table, the
+  runtime release notes, the error and event codes, and the telemetry tags. To change it, change the runtime. The
+  repository's README says how a new release reaches the documentation.
+
 By contributing you agree that your text and images are published under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) and your code examples under the MIT license, the
 licenses of the rest of the documentation.

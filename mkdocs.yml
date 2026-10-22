@@ -66,6 +66,10 @@ plugins:
   - social:
       enabled: !ENV [ENABLE_SOCIAL, false]   # social cards only in CI (needs cairo + pillow)
 
+# The version facts of versions.yml written into the pages: every manual's version box and the list of documents.
+hooks:
+  - hooks/versions.py
+
 markdown_extensions:
   - admonition
   - attr_list

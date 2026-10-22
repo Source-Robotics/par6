@@ -21,4 +21,5 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
+      - run: python tools/test_tools.py          # the version hook and the sync tool
       - run: mkdocs build --strict

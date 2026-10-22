@@ -5,6 +5,4 @@ behaviour, fixed bugs, removed features, and any change to a protocol, a configu
 drive firmware range. Generated from the runtime repository's changelog at every release; which versions of the
 other parts a release works with is in [Versions & compatibility](../../support/versions.md).
 
-## Unreleased
-
-*The first tagged release will fill this page.*
+--8<-- "generated/runtime_release_notes.md"

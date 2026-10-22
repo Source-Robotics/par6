@@ -22,7 +22,7 @@ Three kinds of highlighted text appear in this documentation. Read every Danger 
 
 ## Related documents
 
---8<-- "documents.md"
+<!-- documents-table -->
 
 ## Document history
 

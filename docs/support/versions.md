@@ -1,8 +1,8 @@
 # Versions & compatibility
 
 Every part of the robot carries a version of its own kind. This page says how to read them and which combinations
-work together. It is generated from the runtime repository at every release; what changed in each part is in that
-part's release notes, linked in the table.
+work together. The compatibility matrix is generated from the runtime repository's release; what changed in each part
+is in that part's release notes, linked at the end.
 
 ## How to read a version
 
@@ -22,9 +22,10 @@ fields or keys and stays backward compatible. A `major` release breaks a protoco
 
 ## Compatibility matrix
 
-| Runtime | Client | TCP protocol | RTI protocol | Telemetry format | Drive firmware | Control box PCB | Description package | OS image | Manuals |
-|---|---|---|---|---|---|---|---|---|---|
-| 0.9.0 (development) | — | — | — | — | 103 | v1, v2 | 2.0.0 | Ubuntu 24.04.2, kernel 6.8.4-rt11 | draft |
+One row per runtime release, newest first, generated from the runtime's `COMPATIBILITY.md` at the release this
+documentation describes.
+
+--8<-- "generated/compatibility.md"
 
 ## Release notes, by part
 
