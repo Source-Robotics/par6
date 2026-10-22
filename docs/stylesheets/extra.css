@@ -1,0 +1,63 @@
+/* Source Robotics docs — house styles (Phase 0) */
+
+.md-header__button.md-logo img {
+  height: 48px;
+  width: auto;
+}
+
+/* Manual landing page: hero image and the document metadata block */
+.hero {
+  display: block;
+  margin: 1.5rem auto 2rem auto;
+  max-height: 28rem;
+  max-width: 100%;
+}
+
+.doc-meta {
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  padding: 1rem 0;
+  margin: 2rem 0;
+}
+
+.doc-meta p {
+  margin: 0.4rem 0;
+}
+
+/* Numbered figures: <figure> with <figcaption> */
+.md-typeset figure {
+  margin: 1.5rem auto;
+  text-align: center;
+}
+
+.md-typeset figcaption {
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--md-default-fg-color--light);
+  margin-top: 0.4rem;
+}
+
+/* Hub page row lists: "Title | one line [docs] [repo]" */
+.md-typeset .rows li {
+  margin-bottom: 0.35rem;
+}
+
+/* Icon colours for inline icons: :material-check-circle:{ .sr-green } */
+.sr-green { color: #19c37d; }
+.sr-red { color: #ef5552; }
+.sr-amber { color: #e8a33d; }
+
+/* The edit / report line at the end of every page */
+.md-typeset .page-help {
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+}
+
+/* Command pages: the classification line under a command heading */
+.md-typeset .cmd-class {
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--md-default-fg-color--light);
+  margin-top: -0.6rem;
+}

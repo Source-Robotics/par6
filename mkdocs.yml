@@ -1,0 +1,574 @@
+site_name: Source Robotics Docs
+site_description: Documentation for the PAR6 robot arm, the Robot Control Box, its software and end effectors.
+# Where the site is published: the organisation's docs domain, this repository's path. Search engines take each page's
+# address from here, and the sitemap is built from it.
+site_url: https://docs.source-robotics.com/PAR6-docs/
+# The docs repository: the header card on unmapped pages, and the "edit this page" target.
+repo_url: https://github.com/Source-Robotics/PAR6-docs
+repo_name: Source-Robotics/PAR6-docs
+edit_uri: edit/main/docs/
+copyright: |
+  &copy; 2026 <a href="https://source-robotics.com" target="_blank" rel="noopener">Source Robotics d.o.o.</a> ·
+  Text and images <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> ·
+  Code examples <a href="https://github.com/Source-Robotics/PAR6-docs/blob/main/LICENSE-CODE" target="_blank" rel="noopener">MIT</a>
+
+theme:
+  name: material
+  custom_dir: overrides
+  logo: assets/logo_new_2.png
+  favicon: assets/Icon2.png
+  language: en
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
+  features:
+    - navigation.tabs          # one tab per document
+    - navigation.tabs.sticky
+    - navigation.sections      # the bold sidebar groups
+    - navigation.indexes       # a chapter is a folder with its own page
+    - navigation.footer        # Previous / Next
+    - navigation.top
+    - navigation.path
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.tabs.link
+    - content.code.copy
+    - content.code.annotate
+    - content.action.view
+    - content.action.edit
+    - content.tooltips          # title="..." on links and abbreviations become tooltips
+    - content.footnote.tooltips
+    - announce.dismiss          # the announcement bar (overrides/main.html) can be closed
+  palette:
+    - scheme: slate            # dark by default
+      primary: black
+      accent: green
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - scheme: default
+      primary: black
+      accent: green
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+
+plugins:
+  - search
+  - tags                      # `tags:` in a page's front matter (shown under the title)
+  - glightbox                 # click any image to zoom (figures in manuals)
+  - social:
+      enabled: !ENV [ENABLE_SOCIAL, false]   # social cards only in CI (needs cairo + pillow)
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - def_list
+  - footnotes
+  - abbr
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets:
+      base_path:
+        - docs/includes
+      check_paths: true
+      auto_append:
+        - abbreviations.md    # site-wide abbreviations -> tooltips on every page
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.smartsymbols
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Source-Robotics
+    - icon: fontawesome/brands/instagram
+      link: https://www.instagram.com/5arcrnjak/
+    - icon: fontawesome/brands/x-twitter
+      link: https://twitter.com/SourceRobotics
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/petar-crnjak-009b43180/
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/prjUvjmGpZ
+    - icon: fontawesome/brands/patreon
+      link: https://www.patreon.com/PCrnjak
+  # The version selector in the header (built by mike: one entry per deployed runtime minor + "latest").
+  version:
+    provider: mike
+    default: latest
+    alias: true
+  # The language selector in the header. One language today; a translation adds an entry and a build.
+  alternate:
+    - name: English
+      link: ./
+      lang: en
+  # The header's repository card per section (overrides/partials/source.html): page-URL prefix -> repository.
+  # A longer prefix listed later overrides a shorter one listed earlier.
+  repos:
+    - prefix: par6/
+      name: Source-Robotics/PAR6-Collaborative-Robot-Arm
+      url: https://github.com/Source-Robotics/PAR6-Collaborative-Robot-Arm
+    - prefix: rcb/
+      name: Source-Robotics/RCB-Runtime
+      url: https://github.com/Source-Robotics/RCB-Runtime
+    - prefix: rcb/01-introduction/
+      name: Source-Robotics/RCB-Robot-Control-Box
+      url: https://github.com/Source-Robotics/RCB-Robot-Control-Box
+    - prefix: rcb/02-safety/
+      name: Source-Robotics/RCB-Robot-Control-Box
+      url: https://github.com/Source-Robotics/RCB-Robot-Control-Box
+    - prefix: rcb/03-technical-specifications/
+      name: Source-Robotics/RCB-Robot-Control-Box
+      url: https://github.com/Source-Robotics/RCB-Robot-Control-Box
+    - prefix: rcb/04-installing/
+      name: Source-Robotics/RCB-Robot-Control-Box
+      url: https://github.com/Source-Robotics/RCB-Robot-Control-Box
+    - prefix: rcb/07-operating/firmware
+      name: Source-Robotics/STEPFOC-stepper-controller
+      url: https://github.com/Source-Robotics/STEPFOC-stepper-controller
+    - prefix: rcb/developer/motor-driver-firmware/
+      name: Source-Robotics/STEPFOC-stepper-controller
+      url: https://github.com/Source-Robotics/STEPFOC-stepper-controller
+    - prefix: programming/
+      name: Source-Robotics/RCB-Runtime
+      url: https://github.com/Source-Robotics/RCB-Runtime
+    - prefix: rti/
+      name: Source-Robotics/RCB-Runtime
+      url: https://github.com/Source-Robotics/RCB-Runtime
+    - prefix: dashboard/
+      name: Source-Robotics/RCB-Runtime
+      url: https://github.com/Source-Robotics/RCB-Runtime
+    - prefix: grippers/msg/
+      name: Source-Robotics/MSG-compliant-AI-stepper-gripper
+      url: https://github.com/Source-Robotics/MSG-compliant-AI-stepper-gripper
+    - prefix: grippers/ssg48/
+      name: Source-Robotics/SSG-48-adaptive-electric-gripper
+      url: https://github.com/Source-Robotics/SSG-48-adaptive-electric-gripper
+    - prefix: grippers/pneumatic/
+      name: Source-Robotics/PAR6-Collaborative-Robot-Arm
+      url: https://github.com/Source-Robotics/PAR6-Collaborative-Robot-Arm
+    - prefix: simulation/
+      name: Source-Robotics/PAR6-Collaborative-Robot-Arm
+      url: https://github.com/Source-Robotics/PAR6-Collaborative-Robot-Arm
+  # DEVELOPMENT ONLY: the floating colour switcher (overrides/main.html). Build with DEV_PALETTE=1 to show it.
+  dev_palette: !ENV [DEV_PALETTE, false]
+  # Page status markers (front matter `status: ...`) shown as an icon in the sidebar.
+  status:
+    new: Recently added
+    deprecated: Deprecated
+    draft: Not written yet
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js   # sortable tables (click a header)
+  - javascripts/tablesort.js
+
+exclude_docs: |
+  includes/
+
+# The site root only redirects to the PAR6 Hardware Manual; it is not a page of the nav.
+not_in_nav: |
+  index.md
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+
+nav:
+  - PAR6 Arm:
+      - par6/index.md
+      - Before you start:
+          - About this manual: par6/about.md
+      - Chapters:
+          - 1. Overview:
+              - par6/01-introduction/index.md
+              - The robot system: par6/01-introduction/robot-system.md
+              - Parts and labels: par6/01-introduction/equipment-overview.md
+              - What is in the box: par6/01-introduction/scope-of-delivery.md
+          - 2. Safety:
+              - par6/02-safety/index.md
+              - Intended use: par6/02-safety/intended-use.md
+              - Hazards and how to avoid them: par6/02-safety/hazards.md
+              - Emergency stop: par6/02-safety/emergency-stop.md
+              - Moving the arm by hand: par6/02-safety/moving-by-hand.md
+              - Built-in safety functions: par6/02-safety/safety-functions.md
+              - Workspace and cell layout: par6/02-safety/planning-the-cell.md
+          - 3. Technical data:
+              - par6/03-technical-specifications/index.md
+              - Joint ranges and limits: par6/03-technical-specifications/joint-limits.md
+              - Kinematics and frames: par6/03-technical-specifications/kinematics.md
+              - Operating conditions: par6/03-technical-specifications/ambient-conditions.md
+          - 4. Mounting and installation:
+              - par6/04-installing/index.md
+              - Unpacking: par6/04-installing/unpacking.md
+              - Choosing the location: par6/04-installing/installation-site.md
+              - Mounting the arm: par6/04-installing/mounting.md
+              - Cabling to the control box: par6/04-installing/connecting.md
+              - First power-on: par6/04-installing/first-power-on.md
+          - 5. Operation:
+              - par6/05-operating/index.md
+              - Power on, power off: par6/05-operating/switching-on-off.md
+              - Homing: par6/05-operating/homing.md
+              - Freedrive: par6/05-operating/freedrive.md
+              - Jogging: par6/05-operating/jogging.md
+              - Running programs: par6/05-operating/running-programs.md
+              - Stops, faults and recovery: par6/05-operating/errors-and-recovery.md
+              - Checking the safety functions: par6/05-operating/safety-tests.md
+          - 6. Tools and end effectors:
+              - par6/06-end-effector/index.md
+              - The flange and the tool frame: par6/06-end-effector/flange-and-tool-frame.md
+              - Telling the robot which tool is mounted: par6/06-end-effector/selecting-a-tool.md
+              - Payload: par6/06-end-effector/payload.md
+          - 7. Application examples:
+              - par6/07-examples/index.md
+              - Pick and place: par6/07-examples/pick-and-place.md
+              - A G-code toolpath: par6/07-examples/gcode-toolpath.md
+              - A block program: par6/07-examples/block-program.md
+              - Hand-guiding into a simulator: par6/07-examples/hand-guiding-stream.md
+          - 8. Maintenance:
+              - par6/08-maintenance/index.md
+              - Inspection intervals: par6/08-maintenance/inspection.md
+              - Belts and tensioners: par6/08-maintenance/belts.md
+              - Joint calibration: par6/08-maintenance/calibration.md
+              - Checking homing repeatability: par6/08-maintenance/homing-check.md
+              - Cleaning: par6/08-maintenance/cleaning.md
+          - 9. Troubleshooting:
+              - par6/09-troubleshooting/index.md
+              - Symptoms and causes: par6/09-troubleshooting/by-symptom.md
+              - Homing failures: par6/09-troubleshooting/homing-failures.md
+              - Getting help: par6/09-troubleshooting/support.md
+          - 10. Transport, storage and disposal: par6/10-decommissioning.md
+      - Build guide:
+          - par6/building/index.md
+          - Parts list: par6/building/bill-of-materials.md
+          - Printed and machined parts: par6/building/printing.md
+          - Assembly: par6/building/mechanical-assembly.md
+          - Electronics and cabling: par6/building/electronics-wiring.md
+          - Drive setup and firmware: par6/building/motor-drivers.md
+          - "Step 1: The control box and the configuration": par6/building/step-1-control-box.md
+          - "Step 2: Every drive on the bus": par6/building/step-2-drives.md
+          - "Step 3: E-stop, buttons and I/O": par6/building/step-3-io.md
+          - "Step 4: Joint test moves": par6/building/step-4-joint-test.md
+          - "Step 5: First homing and calibration": par6/building/step-5-homing.md
+      - Appendix:
+          - EMC test results: par6/appendices/emc-test-results.md
+          - Letter of volatility: par6/appendices/letter-of-volatility.md
+          - EU Declaration of Incorporation: par6/appendices/declaration-of-incorporation.md
+          - Stopping times and distances: par6/appendices/stopping-distances.md
+          - Hardware revisions: par6/appendices/hardware-revisions.md
+      - Resources:
+          - Glossary: par6/terminology.md
+          - CAD and downloads: par6/cad-files.md
+
+  - Control Box:
+      - rcb/index.md
+      - Before you start:
+          - About this manual: rcb/about.md
+      - Chapters:
+          - 1. Overview:
+              - rcb/01-introduction/index.md
+              - Parts and labels: rcb/01-introduction/equipment-overview.md
+              - The software inside: rcb/01-introduction/what-runs-on-the-box.md
+          - 2. Safety:
+              - rcb/02-safety/index.md
+              - Emergency stop wiring: rcb/02-safety/emergency-stop.md
+              - "Power states: enabled, disabled, off": rcb/02-safety/power-and-disabled.md
+              - Network security: rcb/02-safety/network-security.md
+          - 3. Technical data: rcb/03-technical-specifications.md
+          - 4. Mounting and installation:
+              - rcb/04-installing/index.md
+              - Mounting and power supply: rcb/04-installing/mounting-and-power.md
+              - Connector panel and pin map: rcb/04-installing/pin-map.md
+              - Digital inputs and outputs: rcb/04-installing/isolated-io.md
+              - CAN bus and drive addresses: rcb/04-installing/can-bus.md
+              - Front panel: rcb/04-installing/front-panel.md
+              - Cabling to the arm: rcb/04-installing/connecting-the-arm.md
+          - 5. Software setup:
+              - rcb/05-software-setup/index.md
+              - "Step 1: The operating system image": rcb/05-software-setup/step-1-os-image.md
+              - "Step 2: Boot configuration": rcb/05-software-setup/step-2-boot-configuration.md
+              - "Step 3: Installing the runtime": rcb/05-software-setup/step-3-install.md
+              - "Step 4: The service": rcb/05-software-setup/step-4-service.md
+              - "Step 5: Network": rcb/05-software-setup/step-5-network.md
+              - "Step 6: System check": rcb/05-software-setup/step-6-system-check.md
+              - Updates: rcb/05-software-setup/updating.md
+          - 6. Configuration:
+              - rcb/06-configuring/index.md
+              - Selecting the robot, tool and cell: rcb/06-configuring/robot-tool-cell.md
+              - Safety settings: rcb/06-configuring/safety-settings.md
+              - Freedrive walls: rcb/06-configuring/freedrive-walls.md
+              - Safety zones: rcb/06-configuring/safety-zones.md
+              - Adding another robot model: rcb/06-configuring/new-robot.md
+          - 7. Operation:
+              - rcb/07-operating/index.md
+              - Power on, power off: rcb/07-operating/power-on-off.md
+              - Front panel menu: rcb/07-operating/front-panel-menu.md
+              - Services and restarts: rcb/07-operating/processes.md
+              - Logs and the support bundle: rcb/07-operating/logs.md
+              - Recordings: rcb/07-operating/recordings.md
+              - Drive firmware updates: rcb/07-operating/firmware-update.md
+              - Drive firmware release notes: rcb/07-operating/firmware-release-notes.md
+              - Drive tuning: rcb/07-operating/motor-tuning.md
+          - 8. Maintenance: rcb/08-maintenance.md
+          - 9. Troubleshooting: rcb/09-troubleshooting.md
+          - 10. Transport, storage and disposal: rcb/10-decommissioning.md
+      - Configuration reference:
+          - Overview: rcb/config/index.md
+          - system.xml: rcb/config/system-xml.md
+          - Robot XML: rcb/config/robot-xml.md
+          - Gripper XML: rcb/config/gripper-xml.md
+          - Homing sequence XML: rcb/config/homing-xml.md
+          - Cell and zone XML: rcb/config/cell-xml.md
+          - Signal filters: rcb/config/filters-xml.md
+          - Telemetry recipes: rcb/config/recipes.md
+          - Command-line tools: rcb/config/tools.md
+      - Developer reference:
+          - Architecture: rcb/developer/architecture.md
+          - Repository layout: rcb/developer/repository-layout.md
+          - Processes, cores and shared memory: rcb/developer/processes-and-memory.md
+          - The real-time loop: rcb/developer/rti-loop.md
+          - Control hierarchy and mode handlers: rcb/developer/control-hierarchy.md
+          - The executor and the planner: rcb/developer/executor-and-planner.md
+          - Shared memory variables: rcb/developer/shared-memory-variables.md
+          - Extending the runtime: rcb/developer/extending.md
+          - Testing: rcb/developer/testing.md
+          - The simulated robot: rcb/developer/simulated-robot.md
+          - Motor driver firmware: rcb/developer/motor-driver-firmware.md
+          - Contributing and releases: rcb/developer/contributing.md
+      - Resources:
+          - Glossary: rcb/terminology.md
+          - CAD and downloads: rcb/cad-files.md
+
+  - Programming:
+      - programming/index.md
+      - Before you start:
+          - About this guide: programming/about.md
+      - Chapters:
+          - 1. Interfaces at a glance:
+              - programming/01-introduction/index.md
+              - The Python client: programming/01-introduction/python-api.md
+              - The command protocol: programming/01-introduction/tcp-protocol.md
+              - The real-time interface: programming/01-introduction/real-time-interface.md
+              - Blocks and G-code: programming/01-introduction/blocks-and-gcode.md
+              - The dashboard as a client: programming/01-introduction/dashboard.md
+          - 2. Concepts and conventions:
+              - programming/02-basic-theory/index.md
+              - Units: programming/02-basic-theory/units.md
+              - Joints, directions and the zero pose: programming/02-basic-theory/joint-numbering.md
+              - Reference frames: programming/02-basic-theory/reference-frames.md
+              - Poses and orientation angles: programming/02-basic-theory/pose-and-angles.md
+              - Arm configurations and singularities: programming/02-basic-theory/configurations.md
+              - Modes and states: programming/02-basic-theory/modes-and-states.md
+              - Homing: programming/02-basic-theory/homing.md
+              - Freedrive: programming/02-basic-theory/freedrive-and-recovery.md
+              - Blending between moves: programming/02-basic-theory/blending.md
+              - Motion profiles: programming/02-basic-theory/motion-profiles.md
+              - Target, commanded, measured: programming/02-basic-theory/target-commanded-actual.md
+              - Who is in control: programming/02-basic-theory/control-ownership.md
+          - 3. The command protocol:
+              - programming/03-tcp-ip/index.md
+              - Connection and message format: programming/03-tcp-ip/overview.md
+              - Replies and events: programming/03-tcp-ip/responses.md
+              - Waiting, callbacks and completion: programming/03-tcp-ip/waiting-and-callbacks.md
+              - Errors and stops: programming/03-tcp-ip/errors-and-safety-stops.md
+              - Telemetry stream: programming/03-tcp-ip/monitoring.md
+              - Clients in other languages: programming/03-tcp-ip/other-languages.md
+          - 4. Real-time interface:
+              - rti/index.md
+              - How it works: rti/how-it-works.md
+              - The two contracts: rti/contracts.md
+              - Specification and limits: rti/specification-and-limits.md
+              - The safety layer: rti/safety-layer.md
+              - Feedforward and dynamics: rti/feedforward.md
+              - Command packet: rti/command-packet.md
+              - State packet and recipes: rti/state-packet.md
+              - Compatibility: rti/compatibility.md
+          - 5. Hard real-time (RTI):
+              - rti/hard/index.md
+              - First stream: rti/hard/getting-started.md
+              - Position, velocity and torque streams: rti/hard/streams.md
+              - Stops and refusals: rti/hard/stops-and-refusals.md
+              - Examples: rti/hard/examples.md
+          - 6. Soft real-time (SOFT_RTI):
+              - rti/soft/index.md
+              - First stream: rti/soft/getting-started.md
+              - Smoothing, lag and pacing: rti/soft/smoothing-and-lag.md
+              - Teleoperation and input devices: rti/soft/teleoperation.md
+              - UDP or TCP: rti/soft/transport.md
+              - Examples: rti/soft/examples.md
+          - 7. Block programming:
+              - programming/07-blocks/index.md
+              - Points and positions: programming/07-blocks/points.md
+              - Block reference: programming/07-blocks/block-reference.md
+              - Check and run: programming/07-blocks/running.md
+          - 8. G-code: programming/08-gcode.md
+          - 9. Diagnostics and troubleshooting:
+              - programming/09-troubleshooting/index.md
+              - Log files: programming/09-troubleshooting/log-files.md
+              - Recordings and the support bundle: programming/09-troubleshooting/recordings.md
+              - FAQ: programming/09-troubleshooting/faq.md
+      - Command reference:
+          - Motion: programming/commands/motion.md
+          - Settings: programming/commands/configuration.md
+          - Robot control: programming/commands/robot-control.md
+          - Status and data: programming/commands/data-request.md
+          - Real-time interface: programming/commands/real-time-interface.md
+          - Safety zones and collision: programming/commands/zones-and-collision.md
+          - Gripper and I/O: programming/commands/gripper-and-io.md
+          - Diagnostics: programming/commands/diagnostics.md
+      - Reference:
+          - Error and event codes: programming/references/error-codes.md
+          - Telemetry tags: programming/references/telemetry-tags.md
+          - Runtime release notes: programming/references/runtime-release-notes.md
+          - Glossary: programming/terminology.md
+
+  - Dashboard:
+      - dashboard/index.md
+      - Before you start:
+          - About this guide: dashboard/about.md
+      - Chapters:
+          - 1. Getting started: dashboard/01-introduction.md
+          - 2. Getting around:
+              - dashboard/02-overview/index.md
+              - The status bar: dashboard/02-overview/status-bar.md
+              - The control row: dashboard/02-overview/control-row.md
+              - Several users at once: dashboard/02-overview/several-users.md
+          - 3. Firmware updates: dashboard/03-firmware.md
+          - 4. Monitoring:
+              - dashboard/04-monitoring/index.md
+              - Joints & TCP: dashboard/04-monitoring/joints-tcp.md
+              - Motor: dashboard/04-monitoring/motor.md
+              - Gripper: dashboard/04-monitoring/gripper.md
+              - Power & Control Box: dashboard/04-monitoring/power-control-box.md
+              - I/O: dashboard/04-monitoring/io.md
+              - Plots: dashboard/04-monitoring/plots.md
+          - 5. Diagnostics:
+              - dashboard/05-diagnostics/index.md
+              - RT Diagnostics: dashboard/05-diagnostics/rt-diagnostics.md
+              - System Info: dashboard/05-diagnostics/system-info.md
+              - Errors: dashboard/05-diagnostics/errors.md
+              - Activity Log: dashboard/05-diagnostics/activity-log.md
+              - Logs: dashboard/05-diagnostics/logs.md
+              - Recordings: dashboard/05-diagnostics/recordings.md
+          - 6. Tuning:
+              - dashboard/06-tuning/index.md
+              - PID Config: dashboard/06-tuning/pid-config.md
+              - Tune Filters: dashboard/06-tuning/tune-filters.md
+              - Walls: dashboard/06-tuning/walls.md
+          - 7. Programs and previews:
+              - dashboard/07-programming/index.md
+              - Plan Preview: dashboard/07-programming/plan-preview.md
+              - Blocks: dashboard/07-programming/blocks.md
+      - Reference:
+          - Glossary: dashboard/terminology.md
+
+  - End Effectors:
+      - grippers/index.md
+      - MSG gripper:
+          - grippers/msg/index.md
+          - About this manual: grippers/msg/about.md
+          - 1. Overview: grippers/msg/01-introduction.md
+          - 2. Technical data: grippers/msg/02-technical-specifications.md
+          - 3. Fingers and fingertips: grippers/msg/03-fingers.md
+          - 4. Mounting and connecting: grippers/msg/04-installing.md
+          - 5. Operation: grippers/msg/05-operating.md
+          - Variants and configuration: grippers/msg/variants-configuration.md
+          - Hardware revisions: grippers/msg/hardware-revisions.md
+      - SSG48 gripper:
+          - grippers/ssg48/index.md
+          - About this manual: grippers/ssg48/about.md
+          - 1. Overview: grippers/ssg48/01-introduction.md
+          - 2. Technical data: grippers/ssg48/02-technical-specifications.md
+          - 3. Fingers and fingertips: grippers/ssg48/03-fingers.md
+          - 4. Mounting and connecting: grippers/ssg48/04-installing.md
+          - 5. Operation: grippers/ssg48/05-operating.md
+          - Hardware revisions: grippers/ssg48/hardware-revisions.md
+      - Pneumatic tools:
+          - grippers/pneumatic/index.md
+          - About this manual: grippers/pneumatic/about.md
+          - 1. Overview: grippers/pneumatic/01-introduction.md
+          - 2. Technical data: grippers/pneumatic/02-technical-specifications.md
+          - 3. Mounting and connecting: grippers/pneumatic/03-installing.md
+          - 4. Air supply and circuits: grippers/pneumatic/04-pneumatic-circuits.md
+          - 5. Operation: grippers/pneumatic/05-operating.md
+          - Hardware revisions: grippers/pneumatic/hardware-revisions.md
+      - Custom end effectors:
+          - Overview: grippers/custom/index.md
+          - The gripper configuration file: grippers/custom/gripper-xml.md
+          - Tool spheres and collision geometry: grippers/custom/collision-geometry.md
+      - Resources:
+          - Glossary: grippers/terminology.md
+          - CAD and downloads: grippers/cad-files.md
+
+  - Simulation & AI:
+      - simulation/index.md
+      - Before you start:
+          - About this guide: simulation/about.md
+      - Simulators:
+          - Models and downloads: simulation/models.md
+          - The description package: simulation/description-package.md
+          - MuJoCo: simulation/mujoco.md
+          - URDF and ROS: simulation/urdf-ros.md
+          - NVIDIA Isaac Sim: simulation/isaac-sim.md
+          - Driving a simulator from the real arm: simulation/tcp-pose-stream.md
+          - Package changelog: simulation/package-changelog.md
+      - AI & learning:
+          - Overview: simulation/ai/index.md
+          - Teleoperation for data collection: simulation/ai/teleoperation.md
+          - Vision-Language-Action: simulation/ai/vla.md
+          - Running inference: simulation/ai/inference.md
+
+  - Support:
+      - Getting help: support/index.md
+      - Report a problem: support/report-a-problem.md
+      - Versions & compatibility: support/versions.md
+      - Contributing: support/contributing.md
+      - Community projects: support/community.md
+      - FAQ: support/faq.md
+
+  # DEVELOPMENT ONLY — every Material element with its source, to choose from. Delete this tab before release.
+  - Dev Lab:
+      - devlab/index.md
+      - Admonitions: devlab/admonitions.md
+      - Text, lists and tooltips: devlab/text.md
+      - Code blocks: devlab/code.md
+      - Tabs and tables: devlab/tabs-tables.md
+      - Images, figures and grids: devlab/images-grids.md
+      - Diagrams and math: devlab/diagrams-math.md
+      - Page and site features: devlab/page-features.md

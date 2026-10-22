@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{#- The announcement bar above the header (dismissable: feature announce.dismiss). Remove the block to hide it. -#}
+{% block announce %}
+  <strong>Documentation preview.</strong> Pages are being written; nothing here is released yet.
+{% endblock %}
+
+{#- Banner shown on a version that is not the default alias ("latest"); needs extra.version (mike). -#}
+{% block outdated %}
+  You are viewing the documentation for an older version, which is no longer actively maintained.
+  <a href="{{ '../' ~ base_url }}">
+    <strong>Click here for the latest version.</strong>
+  </a>
+{% endblock %}
+
+{#- Every page ends with the two ways to fix it: edit on GitHub (a pull request) or open a prefilled issue. -#}
+{% block content %}
+  {{ super() }}
+  {% if page and page.edit_url %}
+  <hr>
+  <p class="page-help">
+    Found a mistake on this page?
+    <a href="{{ page.edit_url }}" target="_blank" rel="noopener">Edit it on GitHub</a> ·
+    <a href="{{ config.repo_url }}/issues/new?title={{ ('Docs: ' ~ page.title) | urlencode }}&body={{ ('Page: ' ~ config.site_url ~ page.url ~ '%0A%0AWhat is wrong:%0A') | urlencode }}" target="_blank" rel="noopener">Report it</a>
+    · <a href="{{ '/support/' | url }}">Get help</a>
+  </p>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% if config.extra.dev_palette %}
+  {#- DEVELOPMENT ONLY: a floating palette switcher to compare header and background colours on the live site.
+      Enabled by DEV_PALETTE=1 at build time; never set in CI. The theme defines its colour variables on <body>
+      (data-md-color-*), so the overrides are set on <body> too. -#}
+  <style>
+    #sr-dev-palette { position: fixed; right: 1rem; bottom: 1rem; z-index: 1000; background: #1b1d24; color: #e6e6e6;
+      border: 1px solid #3a3d4a; border-radius: 6px; padding: .6rem .8rem; font: 12px/1.5 Roboto, sans-serif;
+      box-shadow: 0 4px 16px rgba(0,0,0,.5); max-width: 18rem; }
+    #sr-dev-palette h4 { margin: 0 0 .3rem 0; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: #9aa0b0; }
+    #sr-dev-palette .row { display: flex; flex-wrap: wrap; gap: .3rem; align-items: center; margin-bottom: .5rem; }
+    #sr-dev-palette button { border: 1px solid #555; border-radius: 4px; padding: .15rem .45rem; cursor: pointer;
+      background: #2a2d38; color: #ddd; font: inherit; }
+    #sr-dev-palette button.sw { width: 2rem; height: 1.4rem; padding: 0; }
+    #sr-dev-palette button.on { outline: 2px solid #19c37d; }
+    #sr-dev-palette input { width: 5.2rem; background: #111; color: #ddd; border: 1px solid #555; border-radius: 4px;
+      padding: .1rem .3rem; font: inherit; }
+    #sr-dev-palette .cur { color: #19c37d; font-family: Roboto Mono, monospace; }
+    #sr-dev-palette .hide { float: right; cursor: pointer; color: #9aa0b0; margin-left: .5rem; }
+  </style>
+  <div id="sr-dev-palette">
+    <span class="hide" onclick="this.parentNode.style.display='none'">hide</span>
+    <h4>Top bar (header + tabs)</h4>
+    <div class="row" data-var="--md-primary-fg-color">
+      <button data-v="">current</button>
+      <button class="sw" data-v="#111216" style="background:#111216" title="#111216"></button>
+      <input placeholder="#rrggbb"><button data-set="1">set</button>
+    </div>
+    <h4>Under the bar (page background, dark)</h4>
+    <div class="row" data-var="--md-default-bg-color">
+      <button data-v="">current</button>
+      <button class="sw" data-v="#292b37" style="background:#292b37" title="#292b37"></button>
+      <button class="sw" data-v="#183641" style="background:#183641" title="#183641"></button>
+      <button class="sw" data-v="#143952" style="background:#143952" title="#143952"></button>
+      <input placeholder="#rrggbb"><button data-set="1">set</button>
+    </div>
+    <h4>Accent</h4>
+    <div class="row" data-var="--md-accent-fg-color">
+      <button data-v="">current</button>
+      <button class="sw" data-v="#19c37d" style="background:#19c37d" title="#19c37d"></button>
+      <button class="sw" data-v="#3fb8af" style="background:#3fb8af" title="#3fb8af"></button>
+      <button class="sw" data-v="#e8a33d" style="background:#e8a33d" title="#e8a33d"></button>
+      <input placeholder="#rrggbb"><button data-set="1">set</button>
+    </div>
+    <div>in use: <span class="cur" id="sr-dev-cur">defaults</span></div>
+  </div>
+  <script>
+  (function () {
+    var KEY = "sr-dev-palette", target = document.body;
+    var state = {};
+    try { state = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { state = {}; }
+    function apply() {
+      var parts = [];
+      document.querySelectorAll("#sr-dev-palette .row").forEach(function (row) {
+        var v = row.dataset.var, val = state[v] || "";
+        if (val) { target.style.setProperty(v, val); parts.push(v.replace("--md-", "") + "=" + val); }
+        else { target.style.removeProperty(v); }
+        row.querySelectorAll("button[data-v]").forEach(function (b) { b.classList.toggle("on", b.dataset.v === val); });
+      });
+      document.getElementById("sr-dev-cur").textContent = parts.length ? parts.join("  ") : "defaults";
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    }
+    document.querySelectorAll("#sr-dev-palette .row").forEach(function (row) {
+      var v = row.dataset.var;
+      row.querySelectorAll("button[data-v]").forEach(function (b) {
+        b.addEventListener("click", function () { state[v] = b.dataset.v; apply(); });
+      });
+      row.querySelector("button[data-set]").addEventListener("click", function () {
+        var hex = row.querySelector("input").value.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(hex)) { state[v] = hex; apply(); }
+      });
+    });
+    apply();
+  })();
+  </script>
+  {% endif %}
+{% endblock %}
