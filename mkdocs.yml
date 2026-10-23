@@ -69,6 +69,10 @@ plugins:
 # The version facts of versions.yml written into the pages: every manual's version box and the list of documents.
 hooks:
   - hooks/versions.py
+  # The command reference: one page per RobotClient command, built from the client's docstrings, the robot's
+  # command rules and error catalog (api_src/, copied from the runtime's release tag by tools/sync_runtime.py)
+  # and docs/includes/per_move_settings.yml. See BUILDING_THE_REFERENCE.md.
+  - hooks/command_pages.py
 
 markdown_extensions:
   - admonition
@@ -448,7 +452,24 @@ nav:
               - Recordings and the support bundle: programming/09-troubleshooting/recordings.md
               - FAQ: programming/09-troubleshooting/faq.md
       - Command reference:
-          - Motion: programming/commands/motion.md
+          - Per-move settings: programming/commands/per-move-settings.md
+          - Motion:
+              - programming/commands/motion/index.md
+              - move_joints: programming/commands/motion/move_joints.md
+              - move_pose: programming/commands/motion/move_pose.md
+              - move_linear: programming/commands/motion/move_linear.md
+              - move_linear_rel_world: programming/commands/motion/move_linear_rel_world.md
+              - move_linear_rel_tool: programming/commands/motion/move_linear_rel_tool.md
+              - move_arc: programming/commands/motion/move_arc.md
+              - move_arc_rel_world: programming/commands/motion/move_arc_rel_world.md
+              - move_arc_rel_tool: programming/commands/motion/move_arc_rel_tool.md
+              - move_circle: programming/commands/motion/move_circle.md
+              - move_circle_rel_world: programming/commands/motion/move_circle_rel_world.md
+              - move_circle_rel_tool: programming/commands/motion/move_circle_rel_tool.md
+              - move_spline: programming/commands/motion/move_spline.md
+              - move_spline_rel_world: programming/commands/motion/move_spline_rel_world.md
+              - move_spline_rel_tool: programming/commands/motion/move_spline_rel_tool.md
+              - delay: programming/commands/motion/delay.md
           - Settings: programming/commands/configuration.md
           - Robot control: programming/commands/robot-control.md
           - Status and data: programming/commands/data-request.md

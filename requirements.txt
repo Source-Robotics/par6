@@ -1,12 +1,13 @@
-# Docs build environment (2026-10-21). Install: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+# Docs build environment (2026-10-21; Griffe for the generated command pages added 2026-10-23). Install: python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 # Serve locally: .venv/bin/mkdocs serve -a 0.0.0.0:8000
 mkdocs-material==9.6.14
 mike==2.1.3                      # versioned docs: one deployed version per runtime minor + "latest"
 mkdocs-glightbox==0.4.0          # click an image to zoom (the glightbox plugin in mkdocs.yml)
+# The command reference (2026-10-23): hooks/command_pages.py reads the client's docstrings (api_src/) with Griffe.
+griffelib==2.4.1                 # Griffe (the package's name since 2.x)
 # Social cards are built only in CI (ENABLE_SOCIAL=1); they need the imaging extras:
 #   pip install "mkdocs-material[imaging]==9.6.14"
 # Development only: DEV_PALETTE=1 shows the colour switcher (overrides/main.html); never set it in CI.
 # Planned, added when their pages exist (see planning/03_site_model_v3.md §6):
 #   mkdocs-macros-plugin         the metadata block on every landing page from one YAML
-#   mkdocstrings[python]         the generated API reference
 #   mkdocs-git-revision-date-localized-plugin   "last updated" per page

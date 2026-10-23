@@ -64,6 +64,21 @@ never from uncommitted work.
 .venv/bin/python tools/sync_runtime.py --check   # exit 1 if they are out of date
 ```
 
+**The command reference is generated: one page per command of the Python client.** `hooks/command_pages.py` builds
+each page from `api_src/`, a copy of the runtime's `robotclient` package, its command rules, its error catalog and
+facts read from its code, which the same tool writes from the same tag. The docstrings are written to the runtime's
+`docstrings_guide.md`; to change one, change the runtime. Where every part of a page comes from, the rules, and how to
+add a command: [BUILDING_THE_REFERENCE.md](BUILDING_THE_REFERENCE.md).
+
+To preview docstrings that are not released yet, copy the runtime's working tree instead:
+
+```bash
+.venv/bin/python tools/sync_runtime.py --worktree   # api_src/ from the working tree, for a local preview only
+```
+
+That copy is marked as a preview. `--check` reports it, and the build check fails on it, so it cannot be published.
+Run the tool without `--worktree` before you commit.
+
 ### When the runtime releases a new version
 
 1. **A patch release, for example 0.9.1:** set `runtime.tag` to `v0.9.1` and run `tools/sync_runtime.py`. Commit

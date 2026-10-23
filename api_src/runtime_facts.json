@@ -1,0 +1,97 @@
+{
+  "queued_refusals": [
+    "UNKNOWN_CMD",
+    "CLIENT_TOO_OLD",
+    "REJECTED",
+    "CONTROL_HELD",
+    "MOTION_ABORTED",
+    "BAD_OPTIONS",
+    "QUEUE_FULL"
+  ],
+  "refused": {
+    "completion_policy": "use set_completion_policy() instead of a per-command option"
+  },
+  "settings": [
+    "accel",
+    "blend",
+    "blend_continuity",
+    "blend_mode",
+    "dry_run",
+    "duration",
+    "ik_solver",
+    "jerk",
+    "profile",
+    "ramp_fraction",
+    "samples",
+    "singularity_strategy",
+    "speed"
+  ],
+  "values": {
+    "blend_continuity": {
+      "also_accepted": {
+        "quad": "c1",
+        "quadratic": "c1",
+        "quintic": "c2"
+      },
+      "values": [
+        "c1",
+        "c2"
+      ]
+    },
+    "blend_mode": {
+      "also_accepted": {
+        "g64": "tolerance",
+        "ruckig": "ruckig_corner",
+        "velocity": "exact_velocity"
+      },
+      "values": [
+        "exact_velocity",
+        "zone",
+        "tolerance",
+        "ruckig_corner"
+      ]
+    },
+    "ik_solver": {
+      "also_accepted": {
+        "pin": "pinocchio",
+        "robotics_toolbox": "roboticstoolbox",
+        "rtb": "roboticstoolbox"
+      },
+      "values": [
+        "pinocchio",
+        "roboticstoolbox"
+      ]
+    },
+    "profile": {
+      "also_accepted": {
+        "poly5": "quintic",
+        "s-curve": "s_curve",
+        "scurve": "s_curve",
+        "smoothstep7": "s_curve",
+        "trap": "trapezoid",
+        "trapezoidal": "trapezoid"
+      },
+      "values": [
+        "trapezoid",
+        "quintic",
+        "s_curve",
+        "toppra",
+        "ruckig"
+      ]
+    },
+    "singularity_strategy": {
+      "also_accepted": {
+        "avoid": "auto_avoid",
+        "var_vel": "variable_velocity"
+      },
+      "built": [
+        "stop"
+      ],
+      "values": [
+        "stop",
+        "variable_velocity",
+        "auto_avoid"
+      ]
+    }
+  }
+}

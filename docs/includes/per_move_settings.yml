@@ -1,0 +1,127 @@
+# The per-move settings, described for people (2026-10-23). The page "Per-move settings" and the command pages' setting
+# links are generated from this file and api_src/runtime_facts.json (the robot's own list, from its code).
+#
+# Rules (checked by tools/test_tools.py): one entry for EVERY setting the robot accepts and none it does not; for a
+# choice, a description of EVERY value the robot knows. The other spellings the robot accepts come from the facts
+# file, never from here. Every fact below was checked against RCB-Runtime's code: motion/exec_commands.py
+# (MotionOptions.from_dict), motion/planner_pipeline.py (make_time_parameterizer), motion/trajectory_planner.py and
+# command_executor.py. Change a fact only after reading the code that decides it.
+#
+# Fields: values (what it takes), default, default_set_by (the command that changes the default, if any),
+# about (Markdown), choices (value: description, for a choice).
+
+speed:
+  values: A fraction of each joint's speed limit up to 1, or a percent above 1. `0.2` and `20` are the same.
+  default: 100 %
+  default_set_by: set_joint_speed
+  about: >-
+    Scales every joint's speed limit for this move, from 0.1 % to 100 %; a value outside that is clamped to it. Moves
+    along a Cartesian path (straight lines, arcs, circles and splines) run at no more than 20 % of the speed limit,
+    whatever this says.
+
+accel:
+  values: A fraction of each joint's acceleration limit up to 1, or a percent above 1.
+  default: 100 %
+  about: >-
+    Scales every joint's acceleration limit for this move, from 0.1 % to 100 %; a value outside that is clamped to it.
+    A lower value gives gentler starts and stops and a longer move. It scales the jerk limit with it.
+
+duration:
+  values: Seconds.
+  default: none (the speed decides)
+  about: >-
+    The move takes exactly this long, overriding `speed`. A duration of 0 or less fails with `INVALID_DURATION`; one
+    shorter than the limits allow fails with `DURATION_INFEASIBLE`. A pause (`delay()`) takes it in place of its
+    `seconds`.
+
+profile:
+  values: One of the profiles below.
+  default: '"ruckig"'
+  default_set_by: set_profile
+  about: How the move speeds up and slows down.
+  choices:
+    ruckig: Limits speed, acceleration and jerk. Smooth starts and stops, with no ringing after a fast stop.
+    trapezoid: Limits speed and acceleration. Shorter moves; the arm can ring briefly after a full-speed stop.
+    quintic: A smooth polynomial shape that starts and ends at rest.
+    s_curve: A smooth fixed shape, with the gentlest jerk of the fixed shapes.
+    toppra: The fastest timing along the path within speed and acceleration limits. Needed for `"zone"` and `"tolerance"` blending.
+
+jerk:
+  values: A percent of the jerk limit up to 100, or a fraction up to 1.
+  default: 100 %
+  about: >-
+    Only with `profile="ruckig"`, the only profile that limits jerk: `jerk=25` is four times gentler. A value outside
+    0 to 100 % is refused when the move is sent (`BAD_OPTIONS`); with any other profile the move fails with
+    `PLAN_FAIL`.
+
+ramp_fraction:
+  values: More than 0, up to 0.5.
+  default: '0.25'
+  about: >-
+    Only with `profile="trapezoid"`: the share of the move spent speeding up, and again slowing down. 0.5 leaves no
+    constant-speed part. A value outside the range is refused when the move is sent (`BAD_OPTIONS`); with any other
+    profile the move fails with `PLAN_FAIL`.
+
+blend:
+  values: A percent, or millimetres, depending on `blend_mode`.
+  default: '0'
+  default_set_by: set_blending
+  about: >-
+    How much of a corner is rounded or kept at speed. With `"exact_velocity"` it is the percent of the corner speed
+    kept, 0 to 100 (0 stops at every waypoint). With `"zone"` it is the radius of the rounded corner, and with
+    `"tolerance"` the largest distance from the path, both in millimetres.
+
+blend_mode:
+  values: One of the modes below.
+  default: '"exact_velocity"'
+  about: >-
+    How a move joins the next one. `"zone"` and `"tolerance"` need `profile="toppra"`, and `"ruckig_corner"` needs
+    `profile="ruckig"` and joint moves. Without that, the moves are not refused: they run one by one, without
+    blending, and the robot's log says so.
+  choices:
+    exact_velocity: Passes exactly through each waypoint, keeping part of its speed through it.
+    zone: Rounds each corner with a curve of radius `blend`.
+    tolerance: Rounds each corner so the path never strays more than `blend` from the programmed one.
+    ruckig_corner: Experimental. Jerk-limited corners, for joint moves only.
+
+blend_continuity:
+  values: One of the two curves below.
+  default: '"c1"'
+  about: The shape of a rounded corner.
+  choices:
+    c1: The corner's direction changes smoothly, but its curvature jumps where it meets the straight path.
+    c2: The curvature also starts and ends at zero, so there is no jolt where the corner meets the path; the arm goes slower through the corner.
+
+ik_solver:
+  values: One of the solvers below.
+  default: '"pinocchio"'
+  default_set_by: set_ik_solver
+  about: The solver that turns poses into joint angles. Joint moves do not use it.
+  choices:
+    pinocchio: Damped least squares on the Pinocchio model.
+    roboticstoolbox: Levenberg-Marquardt on the robotics toolbox model.
+
+singularity_strategy:
+  values: One of the strategies below.
+  default: '"stop"'
+  about: >-
+    What to do at a singular pose on a Cartesian path. Only `"stop"` is built; the robot refuses the other two when
+    the move is sent (`BAD_OPTIONS`). Joint moves do not use it.
+  choices:
+    stop: Checks the whole path before the move starts and refuses a path through a singular pose.
+    variable_velocity: Reserved, not built yet. Would slow down through the singular region.
+    auto_avoid: Reserved, not built yet. Would bend the path around it.
+
+samples:
+  values: A whole number.
+  default: automatic
+  about: >-
+    How many points a Cartesian path is planned and checked at: 2 to 500 for a straight line, 2 to 3000 for an arc,
+    circle or spline; a value outside is clamped. Meant for planning tools. Joint moves do not use it.
+
+dry_run:
+  values: '`True` or `False`.'
+  default: '`False`'
+  about: >-
+    `True` plans the move in full and runs every check (joint limits, safety zones, self-collision, the timing)
+    without moving the arm, on every move type.
