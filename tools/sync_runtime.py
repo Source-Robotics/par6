@@ -206,6 +206,15 @@ def _handler_codes(source: str, table: str = "IMMEDIATE_HANDLERS") -> dict[str, 
             visit(root)
         return list(dict.fromkeys(codes))
 
+    # The codes RTI, the real-time controller, can refuse each command with (runtime 2026-10-25: every command the
+    # executor passes to RTI replies with RTI's answer): command_executor.RTI_ANSWER_CODES, after the handler's own.
+    # A runtime from before has no such table: nothing added.
+    rti_answers = {}
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "RTI_ANSWER_CODES"
+                                                for t in node.targets):
+            rti_answers = ast.literal_eval(node.value)
+
     out = {}
     for key, value in zip(mapping.keys, mapping.values):
         if not (isinstance(key, ast.Constant) and isinstance(key.value, str)):
@@ -216,7 +225,8 @@ def _handler_codes(source: str, table: str = "IMMEDIATE_HANDLERS") -> dict[str, 
             roots = [value.func.id] + [n.id for a in value.args for n in ast.walk(a) if isinstance(n, ast.Name)]
         else:
             raise SyncError(f"{table}[{key.value!r}]: a handler the docs cannot read ({ast.dump(value)[:60]})")
-        out[key.value] = closure(roots)
+        codes = closure(roots)
+        out[key.value] = codes + [c for c in rti_answers.get(key.value, ()) if c not in codes]
     return out
 
 

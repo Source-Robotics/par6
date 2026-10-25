@@ -189,6 +189,11 @@ try:
 except sync.SyncError:
     odd = True
 check("B14b ... and a handler the docs cannot read stops the sync instead of reading as 'never refused'", odd)
+got = sync._handler_codes(handlers + 'RTI_ANSWER_CODES = {"fwd": ("MODE_REJECTED",), "set_x": ("BAD_ARGS", "RTI_REFUSED")}\n')
+check("B14c RTI's answer codes (runtime 2026-10-25: command_executor.RTI_ANSWER_CODES) follow the handler's own, "
+      "without repeating one; a runtime without the table adds nothing (B14)",
+      got["fwd"] == ["BAD_ARGS", "MODE_REJECTED"] and got["set_x"] == ["BAD_ARGS", "RTI_REFUSED"]
+      and got["plain"] == [], got)
 
 # ---------------------------------------------------------------- the command pages (hooks/command_pages.py)
 cp = load_module("command_pages", ROOT / "hooks" / "command_pages.py")
