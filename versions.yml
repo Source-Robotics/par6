@@ -13,7 +13,7 @@ docs_version: "1.1"
 # release notes, the error and event codes, the telemetry tags. Its MAJOR.MINOR must be docs_version.
 runtime:
   repository: https://github.com/Source-Robotics/RCB-Runtime
-  tag: v1.1.0
+  tag: v1.1.1
 
 # One entry per document. revision: YEAR.LETTER, a new letter for every published revision of that document.
 # status: draft until the document is published; published: the date of the revision's publication, or null.
