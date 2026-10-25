@@ -1,4 +1,215 @@
 {
+  "immediate_codes": {
+    "calibrate_gripper": [
+      "NO_GRIPPER"
+    ],
+    "capture_telemetry": [
+      "BAD_ARGS",
+      "CAPTURE_REFUSED"
+    ],
+    "clear_errors": [],
+    "disable": [],
+    "enable": [],
+    "enter_exec_mode": [],
+    "enter_flashing_mode": [],
+    "enter_idle_mode": [],
+    "enter_jog_mode": [],
+    "exit_flashing_mode": [],
+    "free_joint": [
+      "BAD_ARGS"
+    ],
+    "get_digital_input": [
+      "BAD_ARGS",
+      "BAD_PIN",
+      "RTI_NOT_RUNNING"
+    ],
+    "get_hardware": [],
+    "get_health": [],
+    "get_joint_walls": [],
+    "get_joints": [
+      "RTI_NOT_RUNNING"
+    ],
+    "get_pose": [
+      "RTI_NOT_RUNNING"
+    ],
+    "get_status": [],
+    "get_versions": [],
+    "get_zones": [],
+    "hall_check": [
+      "BAD_ARGS"
+    ],
+    "home": [],
+    "is_reachable": [
+      "BAD_ARGS",
+      "NO_ROBOT_MODEL",
+      "SELF_COLLISION_MODEL"
+    ],
+    "jog": [
+      "BAD_ARGS"
+    ],
+    "jog_stop": [],
+    "joint_test": [
+      "BAD_ARGS"
+    ],
+    "pause": [],
+    "release_control": [],
+    "release_safety_stop": [],
+    "reload_filters": [
+      "FILTER_CONFIG"
+    ],
+    "reload_recipes": [
+      "RECIPE_DIR"
+    ],
+    "reload_zones": [
+      "ZONE_CONFIG"
+    ],
+    "resume": [],
+    "rti_claim": [],
+    "rti_connect": [
+      "REJECTED",
+      "BAD_ARGS"
+    ],
+    "rti_disconnect": [],
+    "rti_release": [],
+    "rti_set_command_timeout": [
+      "BAD_ARGS"
+    ],
+    "rti_set_dynamics_ff": [
+      "BAD_ARGS"
+    ],
+    "rti_set_gravity_comp": [
+      "BAD_ARGS"
+    ],
+    "rti_set_lowpass": [
+      "BAD_ARGS"
+    ],
+    "rti_set_min_duration": [
+      "BAD_ARGS"
+    ],
+    "rti_set_pace": [
+      "BAD_ARGS"
+    ],
+    "rti_set_rate_limiter": [
+      "BAD_ARGS"
+    ],
+    "rti_set_servo_generator": [
+      "BAD_ARGS"
+    ],
+    "rti_set_start_pose_check": [
+      "BAD_ARGS"
+    ],
+    "rti_set_state_rate": [
+      "BAD_ARGS"
+    ],
+    "rti_set_tcp_vel_limit": [
+      "BAD_ARGS"
+    ],
+    "rti_set_vel_scale": [
+      "BAD_ARGS"
+    ],
+    "safety_stop": [],
+    "save_joint_walls": [
+      "SAVE_FAILED"
+    ],
+    "set_blending": [
+      "BAD_ARGS"
+    ],
+    "set_can_read_first": [
+      "BAD_ARGS"
+    ],
+    "set_collision_detection": [
+      "REJECTED",
+      "BAD_ARGS"
+    ],
+    "set_completion_policy": [
+      "BAD_ARGS",
+      "BAD_POLICY"
+    ],
+    "set_coriolis_comp": [
+      "BAD_ARGS"
+    ],
+    "set_digital_output": [
+      "BAD_ARGS",
+      "BAD_PIN"
+    ],
+    "set_force_confirm": [
+      "BAD_ARGS",
+      "CONTROL_HELD"
+    ],
+    "set_friction_comp": [
+      "BAD_ARGS"
+    ],
+    "set_friction_ff": [
+      "BAD_ARGS"
+    ],
+    "set_gravity_comp": [
+      "REJECTED",
+      "BAD_ARGS"
+    ],
+    "set_gripper": [
+      "NO_GRIPPER",
+      "BAD_ARGS"
+    ],
+    "set_gripper_ctrl_mode": [
+      "NO_GRIPPER",
+      "BAD_ARGS"
+    ],
+    "set_ik_solver": [
+      "BAD_ARGS",
+      "BAD_IK_SOLVER"
+    ],
+    "set_inertia_comp": [
+      "BAD_ARGS"
+    ],
+    "set_jog_accel": [
+      "BAD_ARGS"
+    ],
+    "set_jog_control_mode": [
+      "BAD_ARGS"
+    ],
+    "set_jog_jerk_factor": [
+      "BAD_ARGS"
+    ],
+    "set_jog_profile": [
+      "BAD_ARGS"
+    ],
+    "set_joint_speed": [
+      "BAD_ARGS"
+    ],
+    "set_joint_wall": [
+      "BAD_ARGS",
+      "WALL_UNSTABLE",
+      "WALL_OFF"
+    ],
+    "set_log_level": [
+      "BAD_ARGS"
+    ],
+    "set_payload": [
+      "PAYLOAD_LIMIT"
+    ],
+    "set_pid_gains": [
+      "BAD_ARGS",
+      "REJECTED"
+    ],
+    "set_profile": [
+      "BAD_ARGS",
+      "BAD_PROFILE"
+    ],
+    "set_recipe": [
+      "BAD_ARGS"
+    ],
+    "stop": [],
+    "stop_capture": [
+      "CAPTURE_REFUSED"
+    ],
+    "take_control": [
+      "BAD_ARGS",
+      "CONFIRM_BUSY",
+      "CONFIRM_REQUIRED",
+      "CONTROL_HELD",
+      "INTERNAL"
+    ]
+  },
   "queued_refusals": [
     "UNKNOWN_CMD",
     "CLIENT_TOO_OLD",

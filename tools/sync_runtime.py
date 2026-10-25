@@ -148,13 +148,86 @@ def _reply_codes(source: str, functions: tuple[str, ...]) -> list[str]:
     return list(dict.fromkeys(code for _, _, code in sorted(found)))       # in the order the code checks them
 
 
+def _codes_in(fn: ast.AST) -> list[str]:
+    """The "code" of every {"code": "..."} reply literal inside one function, in source order."""
+    found = []
+    for node in ast.walk(fn):
+        if isinstance(node, ast.Dict):
+            for k, v in zip(node.keys, node.values):
+                if (isinstance(k, ast.Constant) and k.value == "code" and isinstance(v, ast.Constant)
+                        and isinstance(v.value, str)):
+                    found.append((v.lineno, v.col_offset, v.value))
+    return [code for _, _, code in sorted(found)]
+
+
+def _handler_codes(source: str, table: str = "IMMEDIATE_HANDLERS") -> dict[str, list[str]]:
+    """Every error code each immediate command's handler can answer with (2026-10-23, the Robot control pages).
+
+    The table maps a command to a handler function, or to a factory call such as `_forward_fmt(...)`. A handler's codes
+    are the reply literals in it and in every module-level function it names, followed transitively: a helper it calls,
+    a worker thread it starts, a validator handed to a factory. The dispatch refusals (REJECTED, CONTROL_HELD for an
+    owned command, CLIENT_TOO_OLD) come from the command's rule and are not repeated here."""
+    tree = ast.parse(source)
+    funcs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    mapping = None
+    for node in tree.body:
+        targets = node.targets if isinstance(node, ast.Assign) else [node.target] if isinstance(node, ast.AnnAssign) else []
+        if any(isinstance(t, ast.Name) and t.id == table for t in targets) and isinstance(node.value, ast.Dict):
+            mapping = node.value
+    if mapping is None:
+        raise SyncError(f"{table} not found")
+
+    def closure(roots: list[str]) -> list[str]:
+        """Depth first, in source order: a function's own reply codes and, where it names another executor function,
+        that function's codes at that point — so a check the handler makes first (its argument check) comes first."""
+        seen: set[str] = set()
+        codes: list[str] = []
+
+        def visit(name: str) -> None:
+            if name in seen or name not in funcs:
+                return
+            seen.add(name)
+            events = []
+            for node in ast.walk(funcs[name]):
+                if isinstance(node, ast.Dict):
+                    for k, v in zip(node.keys, node.values):
+                        if (isinstance(k, ast.Constant) and k.value == "code" and isinstance(v, ast.Constant)
+                                and isinstance(v.value, str)):
+                            events.append((v.lineno, v.col_offset, "code", v.value))
+                elif isinstance(node, ast.Name) and node.id in funcs and node.id != name:
+                    events.append((node.lineno, node.col_offset, "call", node.id))
+            for _, _, kind, value in sorted(events):
+                if kind == "code":
+                    codes.append(value)
+                else:
+                    visit(value)
+
+        for root in roots:
+            visit(root)
+        return list(dict.fromkeys(codes))
+
+    out = {}
+    for key, value in zip(mapping.keys, mapping.values):
+        if not (isinstance(key, ast.Constant) and isinstance(key.value, str)):
+            continue
+        if isinstance(value, ast.Name):
+            roots = [value.id]
+        elif isinstance(value, ast.Call) and isinstance(value.func, ast.Name):
+            roots = [value.func.id] + [n.id for a in value.args for n in ast.walk(a) if isinstance(n, ast.Name)]
+        else:
+            raise SyncError(f"{table}[{key.value!r}]: a handler the docs cannot read ({ast.dump(value)[:60]})")
+        out[key.value] = closure(roots)
+    return out
+
+
 def runtime_facts(read) -> str:
     """runtime_facts.json, read from the runtime's own code (2026-10-23, "document everything"):
 
     settings / refused   every per-move setting the robot accepts, and the ones it refuses per move;
     values               every value of a choice, with its other accepted spellings (and which are built);
     queued_refusals      every code the executor answers a queued command with when it is sent (dispatch and
-                         _submit_queued; UNKNOWN_CMD never reaches a client method, CLIENT_TOO_OLD only pose commands).
+                         _submit_queued; UNKNOWN_CMD never reaches a client method, CLIENT_TOO_OLD only pose commands);
+    immediate_codes      per immediate command, every code its own handler answers with (_handler_codes).
     """
     opts = read("motion/exec_commands.py")
     executor = read("command_executor.py")
@@ -170,7 +243,8 @@ def runtime_facts(read) -> str:
         values[key] = {"values": canonical, "also_accepted": {a: v for a, v in aliases.items() if a not in canonical}}
     values["singularity_strategy"]["built"] = list(_literal(opts, "IMPLEMENTED_SINGULARITY_STRATEGIES"))
     return json.dumps({"settings": sorted(allowed - set(refused)), "refused": refused, "values": values,
-                       "queued_refusals": _reply_codes(executor, ("dispatch", "_submit_queued"))},
+                       "queued_refusals": _reply_codes(executor, ("dispatch", "_submit_queued")),
+                       "immediate_codes": _handler_codes(executor)},
                       indent=2, sort_keys=True) + "\n"
 
 

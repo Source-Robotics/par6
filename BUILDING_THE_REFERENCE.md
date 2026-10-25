@@ -28,8 +28,12 @@ command_executor.py          ──┘    preview)                              
    - the `robotclient` package and `communication/protocol.py` (the robot's command rules) into `api_src/`;
    - `utility/error_catalog.py` (every code's number and title);
    - `runtime_facts.json`, computed from the runtime's code: every per-move setting the robot accepts and the ones
-     it refuses per move, every value of every choice with its other accepted spellings, and every code the robot
-     can refuse a queued command with when it is sent.
+     it refuses per move, every value of every choice with its other accepted spellings, every code the robot
+     can refuse a queued command with when it is sent, and, per immediate command, every code its handler in the
+     executor answers with. The handler's codes are read from its reply literals and those of every executor
+     function it names (a helper it calls, a worker thread it starts, a validator it hands to a factory). A
+     handler the tool cannot read stops the sync, and a copy without these codes stops the build: either would
+     otherwise publish "never refused".
 
    `--worktree` copies the runtime's working tree instead, to preview docstrings not released yet. That copy is
    marked in `api_src/SOURCE.txt`; `--check` and the build check refuse it, so it is never published.
@@ -39,22 +43,33 @@ command_executor.py          ──┘    preview)                              
    (`<!-- command-aliases: GROUP -->`) from the protocol's `COMMAND_ALIASES`: every old command name the robot still
    accepts, and the command it means.
 
+## Three kinds of command page
+
+| Kind | Which methods | What differs |
+|---|---|---|
+| **Queued** | A command the robot adds to its motion queue (the Motion group) | The box lists the refusals when it is sent, the command's own `Errors:`, the failures every queued command shares and the ways a running move ends |
+| **Immediate** | A command the robot carries out when it arrives (Robot control, settings, reads) | The box lists the dispatch refusals its rule allows (`CLIENT_TOO_OLD` for a pose command, `REJECTED` when it needs a mode, a state or homing, `CONTROL_HELD` when it takes control), then every code its handler answers with, then any other code its docstring's `Errors:` names, each with the docstring's words when it has a line for it. Then the docstring's `Raises:` in full. "Never refused" when there is no code |
+| **Client-side** | A method that sends nothing, such as `control_holder()` | No box and no Protocol line. The facts strip says "Runs in the client"; the docstring's `Raises:`, if any, under Exceptions |
+
+The generator decides the kind from the robot's command rules: a method whose name is no command of the robot is
+client-side.
+
 ## A command page, part by part
 
 | Part | What it shows | Comes from |
 |---|---|---|
 | Title | The command's name | The client method |
-| Facts strip | Queued or at once, the mode, enabled, homed, control | The robot's command rules |
+| Facts strip | Queued or at once (or "Runs in the client"), the mode, enabled, homed, control | The robot's command rules |
 | Description | The summary and text, command names linked to their pages | The docstring |
 | Syntax | The call, with real default values | The function signature |
-| Arguments | Name, type, default, description. `**options` lists every per-move setting with its default, each linked to the Per-move settings page | The signature, the docstring, the settings file, the robot's list of settings |
+| Arguments | Name, type, default, description ("None." without arguments). `**options` lists every per-move setting with its default, each linked to the Per-move settings page | The signature, the docstring, the settings file, the robot's list of settings |
 | Figure | Only where one helps | `command_extras/<command>.md` |
 | Default values | Only for commands that change a default | The docstring's `Defaults:` |
-| Returns | The type and what the value means | The signature and the docstring |
+| Returns | The type and what the value means; "Nothing." for a method that returns `None` | The signature and the docstring |
 | Examples | Always, as a script without `>>>` prompts | The docstring's `Examples:` |
 | Further details | A note or a warning | The docstring's `Note:` / `Warning:` |
 | Usage restrictions | Collapsed. When the robot accepts the command, every code it can be refused or fail with (each linked to the error codes page), and one line on the Python exceptions | The command rules, the executor's replies, the docstring's `Errors:` and `Raises:`, the error catalog |
-| Protocol | The JSON line a client that does not use `robotclient` sends | The example run against the real client from `api_src/`, with a transport that keeps the message (its packing, defaults and unit conversion exactly); `get_pose()` answers a reference pose the page states |
+| Protocol | The JSON line a client that does not use `robotclient` sends (not on a client-side page) | The example run against the real client from `api_src/`, with a transport that keeps the message (its packing, defaults and unit conversion exactly); `get_pose()` answers a reference pose the page states, and no call in the example waits for the robot's status |
 | See also | Related commands and the Per-move settings page | The commands the docstring names, its `See also:` |
 
 The parts appear in this order on every page. The layout is decided; change it only with the project owner. Its look
@@ -94,8 +109,13 @@ meaning none of the four covers, and goes into this table first. Check every col
 
 - the settings file misses a setting the robot accepts, has one it does not, or misses a description for a value
   of a choice;
-- a page's Usage restrictions does not list exactly the robot's refusals, the command's own `Errors:`, the failures
-  every queued command shares and the ways a running move ends;
+- a queued command's Usage restrictions does not list exactly the robot's refusals, the command's own `Errors:`,
+  the failures every queued command shares and the ways a running move ends;
+- an immediate command's Usage restrictions misses a code its handler answers with, names an uncatalogued code or a
+  queued command's failure, or differs from the codes traced by hand for eight Robot control commands;
+- a client-side page has a Usage restrictions box or a Protocol line;
+- the protocol line of an immediate command differs from what the real client sends, also after waits;
+- the sync tool reads a handler's codes wrongly, or skips a handler it cannot read;
 - a generated page is missing from the navigation, or an overview names a method the client does not have;
 - `api_src/` is a working-tree preview instead of a release's copy.
 
@@ -107,8 +127,9 @@ checked too.
 1. In RCB-Runtime, write the command's docstring to `docstrings_guide.md`, including `Errors:` for a queued command
    (find every code in the planner's path for it) and `See also:`. Add its group to `DOCUMENTED` in
    `test_docstrings` and run it.
-2. Here, preview it: `tools/sync_runtime.py --worktree`, then add the command to `PAGES` in
-   `hooks/command_pages.py` and its page to the navigation in `mkdocs.yml`.
+2. Here, preview it: `tools/sync_runtime.py --worktree`, then add the command to its group's list in
+   `hooks/command_pages.py` (`GROUPS`; a new group also gets a folder in `GROUP_DIRS` and an overview page there,
+   `index.md`, with `<!-- command-overview: GROUP -->`) and its page to the navigation in `mkdocs.yml`.
 3. If a figure helps, add `docs/includes/command_extras/<command>.md`.
 4. Build with `--strict` and run `tools/test_tools.py`.
 5. Before committing here: release the runtime, set `runtime.tag`, run `tools/sync_runtime.py` without
@@ -120,8 +141,10 @@ checked too.
   describes it.
 - **A new refusal code in the executor:** it appears on every queued command's page by itself; check that the page
   still reads well.
+- **A new code in an immediate command's handler:** it appears on that command's page by itself; give it a line in
+  the command's `Errors:` docstring section, so the page says when it happens.
 - **A new failure in a command's planning:** add it to that command's `Errors:` docstring section.
-- **A renamed or new command:** update `PAGES`, `GROUPS` and the navigation. A renamed command keeps its old name
+- **A renamed or new command:** update `GROUPS` and the navigation. A renamed command keeps its old name
   in the runtime: a Python alias (the same function), an entry in `COMMAND_ALIASES` (the robot accepts the old ID)
   and one in the client's `WIRE_NAMES_BEFORE_RENAME` (the client sends an older robot the old ID). The "Other names"
   table then lists it by itself.

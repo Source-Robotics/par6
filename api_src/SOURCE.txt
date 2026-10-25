@@ -1,1 +1,1 @@
-RCB-Runtime v0.10.0 (c1d65542d960), copied by tools/sync_runtime.py. Do not edit.
+RCB-Runtime v1.0.0 (a786842a7bbe), copied by tools/sync_runtime.py. Do not edit.

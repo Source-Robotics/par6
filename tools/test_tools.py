@@ -166,6 +166,29 @@ ex = ('def dispatch(conn):\n    if 1:\n        return reply(conn, {"status": "er
 check("B13 the executor's reply codes come from dispatch and _submit_queued only",
       sync._reply_codes(ex, ("dispatch", "_submit_queued")) == ["REJECTED", "CONTROL_HELD", "QUEUE_FULL"],
       sync._reply_codes(ex, ("dispatch", "_submit_queued")))
+handlers = ('def reply(c, o):\n    pass\n'
+            'def _helper(c):\n    return reply(c, {"code": "FROM_HELPER"})\n'
+            'def _worker(c):\n    reply(c, {"code": "FROM_WORKER"})\n'
+            'def _check_x(v):\n    return v > 0\n'
+            'def _forward(prefix, checks=None):\n    def handler(a, c):\n'
+            '        if checks:\n            return reply(c, {"code": "BAD_ARGS"})\n    return handler\n'
+            'def _handle_take(a, c):\n    if a:\n        return reply(c, {"status": "error", "code": "OWN"})\n'
+            '    threading.Thread(target=_worker).start()\n    _helper(c)\n'
+            'def _handle_plain(a, c):\n    reply(c, {"status": "ok"})\n'
+            'def _unused(c):\n    reply(c, {"code": "NEVER"})\n'
+            'IMMEDIATE_HANDLERS = {"take": _handle_take, "plain": _handle_plain,\n'
+            '                      "set_x": _forward("x", (_check_x,)), "fwd": _forward("y")}\n')
+got = sync._handler_codes(handlers)
+check("B14 an immediate command's codes: its handler's, a helper's it calls, a worker thread's it starts, a "
+      "factory's, in source order (depth first); never another function's",
+      got == {"take": ["OWN", "FROM_WORKER", "FROM_HELPER"], "plain": [],
+                                                      "set_x": ["BAD_ARGS"], "fwd": ["BAD_ARGS"]}, got)
+try:
+    sync._handler_codes('IMMEDIATE_HANDLERS = {"odd": lambda a, c: None}\n')
+    odd = False
+except sync.SyncError:
+    odd = True
+check("B14b ... and a handler the docs cannot read stops the sync instead of reading as 'never refused'", odd)
 
 # ---------------------------------------------------------------- the command pages (hooks/command_pages.py)
 cp = load_module("command_pages", ROOT / "hooks" / "command_pages.py")
@@ -220,8 +243,99 @@ if data.ok:
     # What the planner reads per command (motion/trajectory_planner: _pose_from_args, _build_curve_path, delay):
     LAYOUT = {"move_joints": lambda n: n == 6, "move_pose": lambda n: n == 6, "delay": lambda n: n == 1,
               "arc": lambda n: n == 12, "circle": lambda n: n in (6, 7), "spline": lambda n: n >= 12 and n % 6 == 0,
-              "linear": lambda n: n == 6}
-    for name in cp.PAGES:
+              "linear": lambda n: n == 6,
+              # the gripper's queued commands (2026-10-24): position, then optional speed and current
+              "open_gripper": lambda n: n == 0, "close_gripper": lambda n: n == 0,
+              "move_gripper": lambda n: 1 <= n <= 3}
+    def is_queued(name):
+        command = cp.command_of(name, data.rules)
+        return command is not None and data.rules["COMMAND_RULES"][command][0] == data.rules["QUEUED"]
+
+    def page_codes(md):
+        return [numbers.get(int(n)) for n in re.findall(r"\[\*\*\[(\d+)\]\*\*\]", md)]
+
+    # The immediate pages, against the codes traced by hand through the executor (2026-10-23): the dispatch refusals
+    # the rule allows, then the handler's own replies, in the order the robot checks them.
+    # 2026-10-23 (the user's decisions): the strict argument check first (BAD_ARGS); home, the flashing commands and
+    # the motors-off release carry mode rules (REJECTED).
+    TRACED = {"take_control": ["BAD_ARGS", "CONFIRM_BUSY", "CONFIRM_REQUIRED", "CONTROL_HELD", "INTERNAL"],
+              "set_force_confirm": ["BAD_ARGS", "CONTROL_HELD"], "enable": ["CONTROL_HELD"], "disable": [], "stop": [],
+              "home": ["REJECTED", "CONTROL_HELD"], "release_safety_stop": ["REJECTED", "CONTROL_HELD"],
+              "enter_flashing_mode": ["REJECTED", "CONTROL_HELD"], "exit_flashing_mode": ["REJECTED", "CONTROL_HELD"],
+              "safety_stop": [], "clear_errors": [], "release_control": [],
+              "enter_exec_mode": ["REJECTED", "CONTROL_HELD"], "pause": ["REJECTED"],
+              "resume": ["REJECTED", "CONTROL_HELD"]}
+    for name, want in TRACED.items():
+        md = cp.page(name, data)
+        check(f"C14 {name}: Usage restrictions lists exactly the codes traced by hand, in the robot's order",
+              page_codes(md) == want and ("never refused" in md) == (not want), page_codes(md))
+    for name in [n for n in cp.PAGES if not is_queued(n) and cp.command_of(n, data.rules) is not None]:
+        md = cp.page(name, data)
+        command = cp.command_of(name, data.rules)
+        own = set(data.facts["immediate_codes"].get(command, []))
+        check(f"C15 {name}: an immediate page — 'Runs at once', every code its handler answers with, each catalogued, "
+              "no queue failures", 'class="fact q">Runs at once' in md and own <= set(page_codes(md))
+              and None not in page_codes(md) and not set(page_codes(md)) & set(cp.QUEUED_FAILS + cp.QUEUED_ENDINGS))
+    for name in [n for n in cp.PAGES if cp.command_of(n, data.rules) is None and n not in cp.CLASS_PAGES]:
+        md = cp.page(name, data)
+        check(f"C16 {name}: a client-side page — 'Runs in the client', no Usage restrictions, no protocol line",
+              'class="fact q">Runs in the client' in md and "restrictions" not in md and "## Protocol" not in md)
+    wire, _ = cp.wire_message("enter_flashing_mode", ["robot.enter_flashing_mode(force=True, wait=True)"], data.rules)
+    check("C17 an immediate command's protocol line is what the real client sends, and a wait in the example is "
+          "not run", msg_of(wire) == {"id": "c1", "cmd": "enter_flashing_mode", "args": [True]}, wire)
+    wire, _ = cp.wire_message("stop", ["robot.stop(wait=True)"], data.rules)
+    check("C17b ... also for a call that reads the connection after sending (stop)",
+          msg_of(wire) == {"id": "c1", "cmd": "stop", "args": []}, wire)
+    wire, _ = cp.wire_message("enter_exec_mode", ["robot.enable(wait=True)", 'robot.wait_mode("IDLE")',
+                                                  "robot.home(wait=True)", "robot.enter_exec_mode(wait=True)"],
+                              data.rules)
+    check("C17c ... and the waits before the page's own command do not end the example early",
+          msg_of(wire) == {"id": "c1", "cmd": "enter_exec_mode", "args": []}, wire)
+
+    # 2026-10-24: properties, class pages, reference phrases
+    md = cp.page("connected", data)
+    check("C19 a property's page: read without parentheses, no Arguments, its value's type",
+          "robot.connected\n" in md and "robot.connected(" not in md and "## Arguments" not in md
+          and "## Value" in md, md[:400])
+    for cname, spec in cp.CLASS_PAGES.items():
+        md = cp.class_page(cname, data)
+        klass = data.cls(cname)
+        public = [n for n, m in klass.members.items() if not n.startswith("_") and not m.is_alias
+                  and (m.is_function or m.has_labels("property"))]
+        anchors = [f"{{ #{(cname + '.' + n).replace('.', '-').lower()} }}" for n in public]
+        check(f"C20 {cname}: its page has a section for every public method and property, and each of its module's "
+              "classes", all(a in md for a in anchors) and all(f"## `{e}`" in md for e in spec["extras"])
+              and cp.PAGES[cname] in (ROOT / "mkdocs.yml").read_text(encoding="utf-8"),
+              [n for n, a in zip(public, anchors) if a not in md])
+    check("C22 a list in a docstring stays a list; prose is joined into one line",
+          cp.paragraphs("Text one\n    goes on.\n\n- a: one\n  more\n- b: two") == ["Text one goes on.", "- a: one more\n- b: two"],
+          cp.paragraphs("Text one\n    goes on.\n\n- a: one\n  more\n- b: two"))
+    md = cp.class_page("RTIClient", data)
+    check("C23 on a class page, the class's own methods link to their sections, never to the robot's pages",
+          "[`connect()`](#rticlient-connect)" in md and "connection/connect.md" not in md)
+    linked = cp.linkify("is in the Status fields\n    reference.", cp.PAGES["get_status"], "get_status")
+    check("C21 a reference page named in words becomes a link, also across a line break",
+          "](../../references/status-fields.md)" in linked, linked)
+
+    import shutil
+    with tempfile.TemporaryDirectory() as tmp:
+        old_api = cp.API
+        cp.API = Path(tmp) / "api_src"
+        shutil.copytree(old_api, cp.API)
+        facts = json.loads((cp.API / "runtime_facts.json").read_text(encoding="utf-8"))
+        facts.pop("immediate_codes")
+        (cp.API / "runtime_facts.json").write_text(json.dumps(facts), encoding="utf-8")
+        try:
+            cp.Data()
+            refused = False
+        except RuntimeError:
+            refused = True
+        finally:
+            cp.API = old_api
+    check("C18 a copy without the handlers' codes stops the build (every immediate page would say 'never refused')",
+          refused)
+
+    for name in [n for n in cp.PAGES if is_queued(n)]:
         md = cp.page(name, data)
         codes = [int(n) for n in re.findall(r"\[\*\*\[(\d+)\]\*\*\]", md)]
         command = cp.command_of(name, data.rules)

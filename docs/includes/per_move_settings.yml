@@ -11,20 +11,22 @@
 # about (Markdown), choices (value: description, for a choice).
 
 speed:
-  values: A fraction of each joint's speed limit up to 1, or a percent above 1. `0.2` and `20` are the same.
+  values: A percent of each joint's speed limit, above 0 and at most 100. `1` means 1 %, and `0.5` half a percent.
   default: 100 %
   default_set_by: set_joint_speed
   about: >-
-    Scales every joint's speed limit for this move, from 0.1 % to 100 %; a value outside that is clamped to it. Moves
+    Scales every joint's speed limit for this move. A value of 0 or less, above 100 or not a number is refused when the
+    move is sent (`BAD_OPTIONS`). Moves
     along a Cartesian path (straight lines, arcs, circles and splines) run at no more than 20 % of the speed limit,
     whatever this says.
 
 accel:
-  values: A fraction of each joint's acceleration limit up to 1, or a percent above 1.
+  values: A percent of each joint's acceleration limit, above 0 and at most 100.
   default: 100 %
   about: >-
-    Scales every joint's acceleration limit for this move, from 0.1 % to 100 %; a value outside that is clamped to it.
-    A lower value gives gentler starts and stops and a longer move. It scales the jerk limit with it.
+    Scales every joint's acceleration limit for this move. A value of 0 or less, above 100 or not a number is refused
+    when the move is sent (`BAD_OPTIONS`). A lower value gives gentler starts and stops and a longer move. It scales the
+    jerk limit with it.
 
 duration:
   values: Seconds.
@@ -47,7 +49,7 @@ profile:
     toppra: The fastest timing along the path within speed and acceleration limits. Needed for `"zone"` and `"tolerance"` blending.
 
 jerk:
-  values: A percent of the jerk limit up to 100, or a fraction up to 1.
+  values: A percent of the jerk limit, above 0 and at most 100.
   default: 100 %
   about: >-
     Only with `profile="ruckig"`, the only profile that limits jerk: `jerk=25` is four times gentler. A value outside

@@ -12,7 +12,7 @@ robot.connect("192.168.0.84")
 robot.enable(wait=True)
 robot.home(wait=True)
 robot.enter_exec_mode(wait=True)
-robot.move_joints(0, -60, 60, 0, 0, 0, speed=0.2)
+robot.move_joints(0, -60, 60, 0, 0, 0, speed=20)
 ```
 
 ````markdown
@@ -25,20 +25,20 @@ from robotclient import RobotClient
 ## Annotations (numbered markers with a popup)
 
 ```python
-robot.move_joints(0, -60, 60, 0, 0, 0, speed=0.2)  # (1)!
+robot.move_joints(0, -60, 60, 0, 0, 0, speed=20)  # (1)!
 robot.wait_motion_complete()  # (2)!
 ```
 
-1.  Degrees. `speed` below 1 is a fraction of the velocity limit, above 1 a percentage.
+1.  Degrees. `speed` is a percent of the velocity limit.
 2.  Waits for *this* command, not for the whole queue; `wait_idle()` waits for the queue.
 
 ````markdown
 ```python
-robot.move_joints(0, -60, 60, 0, 0, 0, speed=0.2)  # (1)!
+robot.move_joints(0, -60, 60, 0, 0, 0, speed=20)  # (1)!
 robot.wait_motion_complete()  # (2)!
 ```
 
-1.  Degrees. `speed` below 1 is a fraction of the velocity limit, above 1 a percentage.
+1.  Degrees. `speed` is a percent of the velocity limit.
 2.  Waits for *this* command, not for the whole queue.
 ````
 

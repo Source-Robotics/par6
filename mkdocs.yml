@@ -470,16 +470,141 @@ nav:
               - move_spline_rel_world: programming/commands/motion/move_spline_rel_world.md
               - move_spline_rel_tool: programming/commands/motion/move_spline_rel_tool.md
               - delay: programming/commands/motion/delay.md
-          - Settings: programming/commands/configuration.md
-          - Robot control: programming/commands/robot-control.md
-          - Status and data: programming/commands/data-request.md
-          - Real-time interface: programming/commands/real-time-interface.md
-          - Safety zones and collision: programming/commands/zones-and-collision.md
-          - Gripper and I/O: programming/commands/gripper-and-io.md
-          - Diagnostics: programming/commands/diagnostics.md
+          - Robot control:
+              - programming/commands/robot-control/index.md
+              - enable: programming/commands/robot-control/enable.md
+              - disable: programming/commands/robot-control/disable.md
+              - home: programming/commands/robot-control/home.md
+              - clear_errors: programming/commands/robot-control/clear_errors.md
+              - enter_idle_mode: programming/commands/robot-control/enter_idle_mode.md
+              - enter_exec_mode: programming/commands/robot-control/enter_exec_mode.md
+              - enter_jog_mode: programming/commands/robot-control/enter_jog_mode.md
+              - stop: programming/commands/robot-control/stop.md
+              - pause: programming/commands/robot-control/pause.md
+              - resume: programming/commands/robot-control/resume.md
+              - safety_stop: programming/commands/robot-control/safety_stop.md
+              - release_safety_stop: programming/commands/robot-control/release_safety_stop.md
+              - enter_flashing_mode: programming/commands/robot-control/enter_flashing_mode.md
+              - exit_flashing_mode: programming/commands/robot-control/exit_flashing_mode.md
+              - take_control: programming/commands/robot-control/take_control.md
+              - release_control: programming/commands/robot-control/release_control.md
+              - control_holder: programming/commands/robot-control/control_holder.md
+              - holds_control: programming/commands/robot-control/holds_control.md
+              - set_force_confirm: programming/commands/robot-control/set_force_confirm.md
+          - Waiting:
+              - programming/commands/waiting/index.md
+              - wait_idle: programming/commands/waiting/wait_idle.md
+              - wait_motion_complete: programming/commands/waiting/wait_motion_complete.md
+              - wait_mode: programming/commands/waiting/wait_mode.md
+              - wait_homed: programming/commands/waiting/wait_homed.md
+              - wait_enabled: programming/commands/waiting/wait_enabled.md
+              - wait_error_reset: programming/commands/waiting/wait_error_reset.md
+              - wait: programming/commands/waiting/wait.md
+          - Motion settings:
+              - programming/commands/motion-settings/index.md
+              - set_joint_speed: programming/commands/motion-settings/set_joint_speed.md
+              - set_profile: programming/commands/motion-settings/set_profile.md
+              - set_blending: programming/commands/motion-settings/set_blending.md
+              - set_ik_solver: programming/commands/motion-settings/set_ik_solver.md
+              - set_completion_policy: programming/commands/motion-settings/set_completion_policy.md
+          - Jogging:
+              - programming/commands/jogging/index.md
+              - jog: programming/commands/jogging/jog.md
+              - jog_stop: programming/commands/jogging/jog_stop.md
+              - set_jog_accel: programming/commands/jogging/set_jog_accel.md
+              - set_jog_profile: programming/commands/jogging/set_jog_profile.md
+              - set_jog_jerk_factor: programming/commands/jogging/set_jog_jerk_factor.md
+              - set_jog_control_mode: programming/commands/jogging/set_jog_control_mode.md
+          - Gripper:
+              - programming/commands/gripper/index.md
+              - GripperResult: programming/commands/gripper/GripperResult.md
+              - open_gripper: programming/commands/gripper/open_gripper.md
+              - close_gripper: programming/commands/gripper/close_gripper.md
+              - move_gripper: programming/commands/gripper/move_gripper.md
+              - wait_gripper_move_complete: programming/commands/gripper/wait_gripper_move_complete.md
+              - wait_holding_part: programming/commands/gripper/wait_holding_part.md
+              - wait_released_part: programming/commands/gripper/wait_released_part.md
+              - gripper_result: programming/commands/gripper/gripper_result.md
+              - calibrate_gripper: programming/commands/gripper/calibrate_gripper.md
+              - set_gripper_ctrl_mode: programming/commands/gripper/set_gripper_ctrl_mode.md
+              - set_gripper: programming/commands/gripper/set_gripper.md
+          - I/O:
+              - programming/commands/io/index.md
+              - set_digital_output: programming/commands/io/set_digital_output.md
+              - get_digital_input: programming/commands/io/get_digital_input.md
+          - Status and data:
+              - programming/commands/status/index.md
+              - get_joints: programming/commands/status/get_joints.md
+              - get_pose: programming/commands/status/get_pose.md
+              - latest_status: programming/commands/status/latest_status.md
+              - get_status: programming/commands/status/get_status.md
+              - errors: programming/commands/status/errors.md
+              - is_reachable: programming/commands/status/is_reachable.md
+              - get_health: programming/commands/status/get_health.md
+              - get_hardware: programming/commands/status/get_hardware.md
+              - get_versions: programming/commands/status/get_versions.md
+          - Safety and dynamics:
+              - programming/commands/safety-and-dynamics/index.md
+              - set_gravity_comp: programming/commands/safety-and-dynamics/set_gravity_comp.md
+              - set_inertia_comp: programming/commands/safety-and-dynamics/set_inertia_comp.md
+              - set_coriolis_comp: programming/commands/safety-and-dynamics/set_coriolis_comp.md
+              - set_friction_ff: programming/commands/safety-and-dynamics/set_friction_ff.md
+              - set_friction_comp: programming/commands/safety-and-dynamics/set_friction_comp.md
+              - set_payload: programming/commands/safety-and-dynamics/set_payload.md
+              - set_collision_detection: programming/commands/safety-and-dynamics/set_collision_detection.md
+              - get_zones: programming/commands/safety-and-dynamics/get_zones.md
+              - reload_zones: programming/commands/safety-and-dynamics/reload_zones.md
+              - get_joint_walls: programming/commands/safety-and-dynamics/get_joint_walls.md
+              - set_joint_wall: programming/commands/safety-and-dynamics/set_joint_wall.md
+              - save_joint_walls: programming/commands/safety-and-dynamics/save_joint_walls.md
+          - Real-time interface:
+              - programming/commands/real-time-interface/index.md
+              - RTIClient: programming/commands/real-time-interface/RTIClient.md
+              - rti_connect: programming/commands/real-time-interface/rti_connect.md
+              - rti_claim: programming/commands/real-time-interface/rti_claim.md
+              - rti_release: programming/commands/real-time-interface/rti_release.md
+              - rti_disconnect: programming/commands/real-time-interface/rti_disconnect.md
+              - rti_set_start_pose_check: programming/commands/real-time-interface/rti_set_start_pose_check.md
+              - rti_set_rate_limiter: programming/commands/real-time-interface/rti_set_rate_limiter.md
+              - rti_set_tcp_vel_limit: programming/commands/real-time-interface/rti_set_tcp_vel_limit.md
+              - rti_set_vel_scale: programming/commands/real-time-interface/rti_set_vel_scale.md
+              - rti_set_command_timeout: programming/commands/real-time-interface/rti_set_command_timeout.md
+              - rti_set_gravity_comp: programming/commands/real-time-interface/rti_set_gravity_comp.md
+              - rti_set_dynamics_ff: programming/commands/real-time-interface/rti_set_dynamics_ff.md
+              - rti_set_servo_generator: programming/commands/real-time-interface/rti_set_servo_generator.md
+              - rti_set_min_duration: programming/commands/real-time-interface/rti_set_min_duration.md
+              - rti_set_pace: programming/commands/real-time-interface/rti_set_pace.md
+              - rti_set_lowpass: programming/commands/real-time-interface/rti_set_lowpass.md
+              - rti_set_state_rate: programming/commands/real-time-interface/rti_set_state_rate.md
+          - Connection and events:
+              - programming/commands/connection/index.md
+              - connect: programming/commands/connection/connect.md
+              - disconnect: programming/commands/connection/disconnect.md
+              - connected: programming/commands/connection/connected.md
+              - on_error: programming/commands/connection/on_error.md
+              - on_status_change: programming/commands/connection/on_status_change.md
+              - on_motion_complete: programming/commands/connection/on_motion_complete.md
+              - on_motion_error: programming/commands/connection/on_motion_error.md
+              - remote_ip: programming/commands/connection/remote_ip.md
+              - local_ip: programming/commands/connection/local_ip.md
+              - local_label: programming/commands/connection/local_label.md
+          - Diagnostics and service:
+              - programming/commands/diagnostics/index.md
+              - joint_test: programming/commands/diagnostics/joint_test.md
+              - free_joint: programming/commands/diagnostics/free_joint.md
+              - hall_check: programming/commands/diagnostics/hall_check.md
+              - set_pid_gains: programming/commands/diagnostics/set_pid_gains.md
+              - set_can_read_first: programming/commands/diagnostics/set_can_read_first.md
+              - set_log_level: programming/commands/diagnostics/set_log_level.md
+              - capture_telemetry: programming/commands/diagnostics/capture_telemetry.md
+              - stop_capture: programming/commands/diagnostics/stop_capture.md
+              - set_recipe: programming/commands/diagnostics/set_recipe.md
+              - reload_recipes: programming/commands/diagnostics/reload_recipes.md
+              - reload_filters: programming/commands/diagnostics/reload_filters.md
       - Reference:
           - Error and event codes: programming/references/error-codes.md
           - Telemetry tags: programming/references/telemetry-tags.md
+          - Status fields: programming/references/status-fields.md
           - Runtime release notes: programming/references/runtime-release-notes.md
           - Glossary: programming/terminology.md
 

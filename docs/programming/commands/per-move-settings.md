@@ -7,7 +7,7 @@ status: new
 Every move command takes these as keyword arguments. They apply to that one move:
 
 ```python
-robot.move_joints(90, -105, 165, 0, -30, 180, speed=0.2, profile="trapezoid")
+robot.move_joints(90, -105, 165, 0, -30, 180, speed=20, profile="trapezoid")
 ```
 
 A setting you leave out takes its default. The commands in the last column change a default for every move sent
