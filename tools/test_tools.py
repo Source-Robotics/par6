@@ -263,13 +263,24 @@ if data.ok:
     # the rule allows, then the handler's own replies, in the order the robot checks them.
     # 2026-10-23 (the user's decisions): the strict argument check first (BAD_ARGS); home, the flashing commands and
     # the motors-off release carry mode rules (REJECTED).
+    # Runtime 1.1.0 (2026-10-25): a command passed to RTI waits for RTI's answer — RTI_NOT_RUNNING when none comes
+    # (after the handler's own codes), then the codes RTI refuses it with, traced by hand through RTI's handlers:
+    # enable ENABLE_REJECTED; home, enter_exec_mode, enter_flashing_mode, safety_stop MODE_REJECTED; disable,
+    # release_safety_stop, exit_flashing_mode only ask for IDLE (never refused: utility/state_machine); stop
+    # RTI_REFUSED (an unreadable exec_stop); clear_errors, pause, resume never refused by RTI. take_control,
+    # set_force_confirm and release_control pass nothing to RTI with an answer.
     TRACED = {"take_control": ["BAD_ARGS", "CONFIRM_BUSY", "CONFIRM_REQUIRED", "CONTROL_HELD", "INTERNAL"],
-              "set_force_confirm": ["BAD_ARGS", "CONTROL_HELD"], "enable": ["CONTROL_HELD"], "disable": [], "stop": [],
-              "home": ["REJECTED", "CONTROL_HELD"], "release_safety_stop": ["REJECTED", "CONTROL_HELD"],
-              "enter_flashing_mode": ["REJECTED", "CONTROL_HELD"], "exit_flashing_mode": ["REJECTED", "CONTROL_HELD"],
-              "safety_stop": [], "clear_errors": [], "release_control": [],
-              "enter_exec_mode": ["REJECTED", "CONTROL_HELD"], "pause": ["REJECTED"],
-              "resume": ["REJECTED", "CONTROL_HELD"]}
+              "set_force_confirm": ["BAD_ARGS", "CONTROL_HELD"],
+              "enable": ["CONTROL_HELD", "RTI_NOT_RUNNING", "ENABLE_REJECTED"], "disable": ["RTI_NOT_RUNNING"],
+              "stop": ["RTI_NOT_RUNNING", "RTI_REFUSED"],
+              "home": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING", "MODE_REJECTED"],
+              "release_safety_stop": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING"],
+              "enter_flashing_mode": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING", "MODE_REJECTED"],
+              "exit_flashing_mode": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING"],
+              "safety_stop": ["RTI_NOT_RUNNING", "MODE_REJECTED"], "clear_errors": ["RTI_NOT_RUNNING"],
+              "release_control": [],
+              "enter_exec_mode": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING", "MODE_REJECTED"],
+              "pause": ["REJECTED", "RTI_NOT_RUNNING"], "resume": ["REJECTED", "CONTROL_HELD", "RTI_NOT_RUNNING"]}
     for name, want in TRACED.items():
         md = cp.page(name, data)
         check(f"C14 {name}: Usage restrictions lists exactly the codes traced by hand, in the robot's order",

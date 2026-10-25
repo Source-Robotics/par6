@@ -1,22 +1,45 @@
 {
   "immediate_codes": {
     "calibrate_gripper": [
-      "NO_GRIPPER"
+      "NO_GRIPPER",
+      "RTI_NOT_RUNNING"
     ],
     "capture_telemetry": [
       "BAD_ARGS",
       "CAPTURE_REFUSED"
     ],
-    "clear_errors": [],
-    "disable": [],
-    "enable": [],
-    "enter_exec_mode": [],
-    "enter_flashing_mode": [],
-    "enter_idle_mode": [],
-    "enter_jog_mode": [],
-    "exit_flashing_mode": [],
+    "clear_errors": [
+      "RTI_NOT_RUNNING"
+    ],
+    "disable": [
+      "RTI_NOT_RUNNING"
+    ],
+    "enable": [
+      "RTI_NOT_RUNNING",
+      "ENABLE_REJECTED"
+    ],
+    "enter_exec_mode": [
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED"
+    ],
+    "enter_flashing_mode": [
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED"
+    ],
+    "enter_idle_mode": [
+      "RTI_NOT_RUNNING"
+    ],
+    "enter_jog_mode": [
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED"
+    ],
+    "exit_flashing_mode": [
+      "RTI_NOT_RUNNING"
+    ],
     "free_joint": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "FREE_JOINT_REFUSED"
     ],
     "get_digital_input": [
       "BAD_ARGS",
@@ -36,78 +59,135 @@
     "get_versions": [],
     "get_zones": [],
     "hall_check": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "HALL_CHECK_REFUSED"
     ],
-    "home": [],
+    "home": [
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED"
+    ],
     "is_reachable": [
       "BAD_ARGS",
       "NO_ROBOT_MODEL",
       "SELF_COLLISION_MODEL"
     ],
     "jog": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
-    "jog_stop": [],
+    "jog_stop": [
+      "RTI_NOT_RUNNING"
+    ],
     "joint_test": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "JOINT_TEST_REFUSED"
     ],
-    "pause": [],
+    "pause": [
+      "RTI_NOT_RUNNING"
+    ],
     "release_control": [],
-    "release_safety_stop": [],
+    "release_safety_stop": [
+      "RTI_NOT_RUNNING"
+    ],
     "reload_filters": [
-      "FILTER_CONFIG"
+      "FILTER_CONFIG",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "reload_recipes": [
-      "RECIPE_DIR"
+      "RECIPE_DIR",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "reload_zones": [
-      "ZONE_CONFIG"
+      "ZONE_CONFIG",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
-    "resume": [],
-    "rti_claim": [],
+    "resume": [
+      "RTI_NOT_RUNNING"
+    ],
+    "rti_claim": [
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
+    ],
     "rti_connect": [
       "REJECTED",
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED",
+      "RTI_REFUSED"
     ],
-    "rti_disconnect": [],
-    "rti_release": [],
+    "rti_disconnect": [
+      "RTI_NOT_RUNNING"
+    ],
+    "rti_release": [
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
+    ],
     "rti_set_command_timeout": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_dynamics_ff": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_gravity_comp": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "rti_set_lowpass": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_min_duration": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_pace": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_rate_limiter": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "rti_set_servo_generator": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_start_pose_check": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "rti_set_state_rate": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_tcp_vel_limit": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "rti_set_vel_scale": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
-    "safety_stop": [],
+    "safety_stop": [
+      "RTI_NOT_RUNNING",
+      "MODE_REJECTED"
+    ],
     "save_joint_walls": [
       "SAVE_FAILED"
     ],
@@ -115,18 +195,25 @@
       "BAD_ARGS"
     ],
     "set_can_read_first": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_collision_detection": [
       "REJECTED",
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_completion_policy": [
       "BAD_ARGS",
-      "BAD_POLICY"
+      "BAD_POLICY",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_coriolis_comp": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_digital_output": [
       "BAD_ARGS",
@@ -137,41 +224,55 @@
       "CONTROL_HELD"
     ],
     "set_friction_comp": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_friction_ff": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_gravity_comp": [
       "REJECTED",
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_gripper": [
       "NO_GRIPPER",
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_gripper_ctrl_mode": [
       "NO_GRIPPER",
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_ik_solver": [
       "BAD_ARGS",
       "BAD_IK_SOLVER"
     ],
     "set_inertia_comp": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_jog_accel": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_jog_control_mode": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_jog_jerk_factor": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING"
     ],
     "set_jog_profile": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_joint_speed": [
       "BAD_ARGS"
@@ -179,26 +280,38 @@
     "set_joint_wall": [
       "BAD_ARGS",
       "WALL_UNSTABLE",
-      "WALL_OFF"
+      "WALL_OFF",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_log_level": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_payload": [
-      "PAYLOAD_LIMIT"
+      "PAYLOAD_LIMIT",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
     "set_pid_gains": [
       "BAD_ARGS",
-      "REJECTED"
+      "REJECTED",
+      "RTI_NOT_RUNNING"
     ],
     "set_profile": [
       "BAD_ARGS",
       "BAD_PROFILE"
     ],
     "set_recipe": [
-      "BAD_ARGS"
+      "BAD_ARGS",
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
     ],
-    "stop": [],
+    "stop": [
+      "RTI_NOT_RUNNING",
+      "RTI_REFUSED"
+    ],
     "stop_capture": [
       "CAPTURE_REFUSED"
     ],

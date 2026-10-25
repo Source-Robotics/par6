@@ -7,13 +7,13 @@
 
 # The documentation version: the runtime's MAJOR.MINOR these pages describe. The publishing workflow publishes the
 # site under this name (the version selector in the header) and points "latest" at it.
-docs_version: "1.0"
+docs_version: "1.1"
 
 # The runtime release the generated pages come from (tools/sync_runtime.py): the compatibility table, the runtime
 # release notes, the error and event codes, the telemetry tags. Its MAJOR.MINOR must be docs_version.
 runtime:
   repository: https://github.com/Source-Robotics/RCB-Runtime
-  tag: v1.0.0
+  tag: v1.1.0
 
 # One entry per document. revision: YEAR.LETTER, a new letter for every published revision of that document.
 # status: draft until the document is published; published: the date of the revision's publication, or null.
