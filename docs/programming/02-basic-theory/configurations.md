@@ -19,10 +19,11 @@ choices with two answers each.
 
 The figure shows all eight for one tool pose: PAR6 with nothing on the flange, the tool centre point 250 mm in
 front of the base and 230 mm up, the tool tilted 30° from vertical. The flange is in exactly the same place and
-orientation in every picture; only the joints differ. The colours mark the links: base turquoise, joint 1 green,
-upper arm yellow, elbow red, forearm green, wrist red, flange orange.
+orientation in every picture; only the joints differ. The teal dot marks the centre of the flange and the
+arrow its axis, the same in every picture.
 
-![The eight configurations of PAR6 for one tool pose: elbow up or down, shoulder right or left, wrist flipped or not](../../assets/theory/configurations_par6.webp){ width="700" }
+![The eight configurations of PAR6 for one tool pose: elbow up or down, shoulder right or left, wrist flipped or not](../../assets/theory/configurations_par6.webp#only-light){ width="700" }
+![The eight configurations of PAR6 for one tool pose: elbow up or down, shoulder right or left, wrist flipped or not](../../assets/theory/configurations_par6_dark.webp#only-dark){ width="700" }
 
 The figure is the mathematics: all eight reach the pose. The joint limits are not marked, because the PAR6 model in
 [robot_descriptions](https://github.com/Source-Robotics/robot_descriptions), from which the poses were solved and
