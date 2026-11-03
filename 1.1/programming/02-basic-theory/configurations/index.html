@@ -6864,6 +6864,27 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Arm configurations and singularities
+    
+  </span>
+  
+    
+  
+  
+    <span class="md-status md-status--draft" title="Not written yet">
+    </span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -6883,6 +6904,34 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -16545,6 +16594,23 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#configurations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurations
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -16578,6 +16644,26 @@
 
 <h1 id="configurations-singularities-and-workspace">Configurations, singularities and workspace<a class="headerlink" href="#configurations-singularities-and-workspace" title="Permanent link">&para;</a></h1>
 <p><em>Stub.</em> <!-- sources: planning/01_structure_proposal_v1.md §4 --></p>
+<h2 id="configurations">Configurations<a class="headerlink" href="#configurations" title="Permanent link">&para;</a></h2>
+<p>A six-axis arm with a spherical wrist can reach most tool poses in eight ways, its <strong>configurations</strong>: three
+choices with two answers each.</p>
+<ul>
+<li><strong>Shoulder right or left</strong>: the wrist centre in front of the joint 1 axis, or behind it with joint 1 turned
+  about 180° and the arm reaching back over itself.</li>
+<li><strong>Elbow up or down</strong>: the elbow above or below the line from the shoulder to the wrist centre.</li>
+<li><strong>Wrist flipped or not</strong>: joint 5 positive or negative; joints 4 and 6 turn by 180° to keep the tool where it
+  is.</li>
+</ul>
+<p>The figure shows all eight for one tool pose: PAR6 with nothing on the flange, the tool centre point 250 mm in
+front of the base and 230 mm up, the tool tilted 30° from vertical. The flange is in exactly the same place and
+orientation in every picture; only the joints differ. The teal dot marks the centre of the flange and the
+arrow its axis, the same in every picture.</p>
+<p><a class="glightbox" href="../../../assets/theory/configurations_par6.webp#only-light" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The eight configurations of PAR6 for one tool pose: elbow up or down, shoulder right or left, wrist flipped or not" src="../../../assets/theory/configurations_par6.webp#only-light" width="700" /></a>
+<a class="glightbox" href="../../../assets/theory/configurations_par6_dark.webp#only-dark" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="The eight configurations of PAR6 for one tool pose: elbow up or down, shoulder right or left, wrist flipped or not" src="../../../assets/theory/configurations_par6_dark.webp#only-dark" width="700" /></a></p>
+<p>The figure is the mathematics: all eight reach the pose. The joint limits are not marked, because the PAR6 model in
+<a href="https://github.com/Source-Robotics/robot_descriptions">robot_descriptions</a>, from which the poses were solved and
+drawn, carries none; the runtime's joint limits decide which of these the arm can actually take, and several would
+also make the arm hit itself.</p>
 
 
 
@@ -16670,7 +16756,9 @@
     <div class="md-copyright__highlight">
       &copy; 2026 <a href="https://source-robotics.com" target="_blank" rel="noopener">Source Robotics d.o.o.</a> ·
 Text and images <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a> ·
-Code examples <a href="https://github.com/Source-Robotics/par6/blob/main/LICENSE-CODE" target="_blank" rel="noopener">MIT</a>
+Code examples <a href="https://github.com/Source-Robotics/par6/blob/main/LICENSE-CODE" target="_blank" rel="noopener">MIT</a> ·
+Robot models and pictures made from them: <a href="https://github.com/Source-Robotics/robot_descriptions" target="_blank" rel="noopener">robot_descriptions</a>,
+<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
 
     </div>
   
