@@ -75,6 +75,9 @@ hooks:
   # command rules and error catalog (api_src/, copied from the runtime's release tag by tools/sync_runtime.py)
   # and docs/includes/per_move_settings.yml. See BUILDING_THE_REFERENCE.md.
   - hooks/command_pages.py
+  # Captions: a standalone picture (a light/dark pair counts once) becomes "Figure 3.2: <alt text>", numbered per
+  # chapter in nav order; a raw <figure>'s caption gets its number too. After command_pages.py, whose pages it numbers.
+  - hooks/figures.py
 
 markdown_extensions:
   - admonition

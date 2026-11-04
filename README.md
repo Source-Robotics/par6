@@ -106,6 +106,17 @@ To preview the published versions locally, with the version selector, run `.venv
 
 Which runtime, firmware and hardware versions work together is on the site's *Versions & compatibility* page.
 
+## Figures
+
+**Every picture is a numbered figure, and nobody types the number.** `hooks/figures.py` wraps a picture on a line of
+its own (or a light and a dark version on two lines, `#only-light` and `#only-dark`) in a `<figure>` with the caption
+"Figure 3.2: <alt text>", numbered per chapter in nav order, per page outside the numbered chapters. Write the alt text
+as the caption: one sentence that says what the picture shows. A raw `<figure>`, such as a command page's drawing in
+`docs/includes/command_extras/`, gets `<figcaption>text</figcaption>` without a number, and the hook adds it. Hero
+pictures, pictures inside a paragraph and the Dev Lab tab are left alone. The robot figures are rendered from the
+robot model in [robot_descriptions](https://github.com/Source-Robotics/robot_descriptions), each in a light and a dark
+version.
+
 ## Contributing
 
 A small fix can be made from the browser: every page ends with a link that opens it for editing on GitHub. For

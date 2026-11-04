@@ -20,5 +20,5 @@
     <text class="fig-label" x="120" y="172" text-anchor="middle">(b) move_linear</text>
   </g>
 </svg>
-<figcaption><b>Figure 1</b> The same start and end poses. A joint move's tool path curves; a straight-line move's path does not.</figcaption>
+<figcaption>The same start and end poses. A joint move's tool path curves; a straight-line move's path does not.</figcaption>
 </figure>

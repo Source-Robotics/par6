@@ -36,7 +36,11 @@ Text wraps around an image aligned to the right ...
 </figure>
 ```
 
-This is the manuals' figure form: numbered per chapter, captioned, zoomable.
+This is the manuals' figure form: numbered per chapter, captioned, zoomable. On every page outside the Dev Lab,
+`hooks/figures.py` makes it: write the picture on a line of its own (or a light and a dark version on two lines),
+with its alt text as one sentence, and the hook wraps it and numbers it. A raw `<figure>` gets
+`<figcaption>text</figcaption>` without a number, and the hook adds "Figure N: ". Never type the number yourself;
+the build check refuses one.
 
 ## Light and dark variants
 

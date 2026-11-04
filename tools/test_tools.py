@@ -374,6 +374,34 @@ if data.ok:
 else:
     check("C7 api_src/ exists (run tools/sync_runtime.py)", False)
 
+# ---------------------------------------------------------------- E. the figures hook (hooks/figures.py)
+DOCS = ROOT / "docs"
+fig = load_module("figures_hook", ROOT / "hooks" / "figures.py")
+pair = "\n".join(["Text.", "", '![A robot](a.webp#only-light){ width="9" }',
+                  '![A robot](a_dark.webp#only-dark){ width="9" }', "", "More."])
+out, n = fig.transform(pair, 1, "3.")
+check("E1 a light and a dark picture are one figure, numbered on from the chapter's count, alt text as caption",
+      n == 1 and out.count("<figure") == 1 and "<figcaption>Figure 3.2: A robot.</figcaption>" in out, out)
+inline = "\n".join(["A line of text", "![A robot](a.webp)", "", "![Hero](h.webp){ .hero }", "",
+                    "```markdown", "", "![In code](c.webp)", "", "<figcaption>In code</figcaption>", "```", ""])
+out, n = fig.transform(inline, 0, "")
+check("E2 a picture inside a paragraph, a hero picture and anything in fenced code are left alone",
+      n == 0 and "<figure" not in out and "Figure" not in out, out)
+check("E3 numbered chapters count across pages, other pages on their own",
+      fig.chapter("par6/03-technical-specifications/joint-limits.md") == ("par6/03-technical-specifications", "3.")
+      and fig.chapter("rcb/03-technical-specifications.md") == ("rcb/03-technical-specifications.md", "3.")
+      and fig.chapter("programming/commands/motion/move_joints.md") == ("programming/commands/motion/move_joints.md", ""))
+raw = "\n".join(['![A](a.webp){ width="9" }', "", '<figure class="cmd-fig">', "<svg></svg>",
+                 "<figcaption>Two paths.</figcaption>", "</figure>", ""])
+out, n = fig.transform(raw, 0, "")
+check("E4 a raw figure's caption is numbered in reading order with the pictures",
+      n == 2 and "Figure 1: A." in out and "<figcaption>Figure 2: Two paths.</figcaption>" in out, out)
+typed = re.compile(r"<figcaption>\s*(<b>)?\s*Figure\s*\d|!\[Figure\s*\d")
+by_hand = [str(p.relative_to(DOCS)) for p in DOCS.rglob("*.md") if not p.relative_to(DOCS).as_posix().startswith("devlab/")
+           and typed.search(p.read_text(encoding="utf-8"))]
+check("E5 no figure number typed by hand (the hook numbers them; the Dev Lab shows the form)", not by_hand,
+      "; ".join(by_hand))
+
 print()
 print(f"{len(fails)} failed" if fails else "ALL PASSED")
 sys.exit(1 if fails else 0)
