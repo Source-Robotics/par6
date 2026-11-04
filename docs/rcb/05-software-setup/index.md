@@ -1,10 +1,13 @@
----
-status: draft
----
-
 # Setting up the software
 
-*Stub.* One paragraph on what this chapter covers.
+The control box runs the runtime on a Raspberry Pi 5, under Ubuntu with a real-time kernel. These six steps set up
+a new Pi in the order that reproduces the reference robot, and each ends with a check of what you should now see.
+They follow the runtime's own setup list, in its
+[README](<!-- version-url: runtime -->/README.md) at <!-- version-link: runtime -->.
+
+!!! warning "Not yet repeated on a clean machine"
+    The installation is written from how the reference robot was set up. It has not been repeated from scratch on a
+    clean Pi, so a step can still be missing. Do every check before you go on to the next step.
 
 ## In this chapter
 

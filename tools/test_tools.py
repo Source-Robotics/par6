@@ -120,6 +120,10 @@ row = next((line for line in compat.splitlines() if line.startswith(f"| {shipped
 image = re.search(r"Ubuntu ([\d.]+) LTS, kernel ([\w.-]+)", row)
 check("A13 the OS image of versions.yml is the one the compatibility table lists for this runtime",
       image is not None and all(part in str(shipped["os_image"]["tag"]) for part in image.groups()), row)
+kernels = {(str(p.relative_to(ROOT / "docs")), k) for p in (ROOT / "docs").rglob("*.md")
+           if "generated" not in p.parts for k in re.findall(r"\b\d+\.\d+\.\d+-rt\d+-raspi\b", p.read_text(encoding="utf-8"))}
+check("A14 a kernel named on a page (the setup's uname -r) is the one the compatibility table lists",
+      image is not None and kernels and all(k == image.group(2) for _, k in kernels), sorted(kernels))
 
 # ---------------------------------------------------------------- the sync tool
 check("B1 esc: an XML name stays visible, no emphasis, no table break",
