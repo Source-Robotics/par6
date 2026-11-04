@@ -1,0 +1,108 @@
+# The known issues of the PAR6 system's runtime and control box, in ONE place. hooks/known_issues.py writes them into
+# the PAR6 manual's Known issues page (<!-- known-issues -->, all of them) and wherever <!-- known-issues: COMPONENT -->
+# stands (one component). tools/test_tools.py checks the file.
+#
+# Only issues that can be pointed to in the code, the docs or the repositories (the source is given above each one).
+# An issue stays here when it is fixed: set status: fixed and fixed_in to the version that fixes it, and the page
+# moves it to "Fixed". Never renumber: the id is how people refer to an issue.
+#
+#   id          KI-<number>, never reused
+#   component   a key under components:
+#   summary     what happens, in one or two sentences
+#   workaround  what to do until it is fixed
+#   page        the docs page that describes it (path under docs/, an #anchor allowed), and title, its link text
+#   status      open or fixed; fixed_in: the version that fixes it (when fixed)
+#   since       the date the issue was recorded
+#
+# The runtime's version is the release the issues were checked against. It must be the release in versions.yml
+# (test F6): when runtime.tag changes, check every runtime issue against the new release, then change it here.
+
+components:
+  runtime: {name: Runtime (the control box's software), version: "1.1.1"}
+  control_box_pcb: {name: Control box mainboard, version: "PCB v1"}
+  beta_mainboard: {name: Control box mainboard of the beta batch, version: "the beta boards"}
+
+issues:
+  # RCB-Runtime v1.1.1, README.md: "Quick Install", NOT PROPERLY TESTED YET.
+  - id: KI-1
+    component: runtime
+    summary: The installation has not been repeated on a clean machine. It is written from how the reference robot
+      was set up, and a package the robot needs may still be missing from `requirements.txt`.
+    workaround: Do every step's check. `bash scripts/setup_system.sh --check` imports the runtime's main packages and
+      names any that fail; report a missing one.
+    page: rcb/05-software-setup/step-3-install.md
+    title: "Step 3: Installing the runtime"
+    status: open
+    since: 2026-11-04
+
+  # RCB-Runtime v1.1.1, README.md "Python 3.11, not 3.12"; scripts/install.sh (PYTHON_BIN, the >= 3.11 gate).
+  - id: KI-2
+    component: runtime
+    summary: "`scripts/install.sh` builds its environment with whatever `python3` is and accepts Python 3.12, Ubuntu
+      24.04's default. Only 3.11 has been tested."
+    workaround: Make Python 3.11 the `python3` before you install. `bash scripts/setup_system.sh --check` reports an
+      environment on another version.
+    page: rcb/05-software-setup/step-3-install.md#python-311
+    title: Python 3.11 as python3
+    status: open
+    since: 2026-11-04
+
+  # RCB-Runtime v1.1.1, README.md "Device permissions and sudo"; scripts/check_system.py (required=False).
+  - id: KI-3
+    component: runtime
+    summary: "`scripts/check_system.py`, which the installer runs, reports missing rights to the UART, the I2C device
+      and the GPIO chip as `WARN`, not `FAIL`: the installation passes, and then the mainboard link, the display and
+      the GPIO do not work."
+    workaround: Run `sudo bash scripts/setup_system.sh`, which adds your user to the groups dialout, i2c and gpio, and
+      check with `bash scripts/setup_system.sh --check`.
+    page: rcb/05-software-setup/step-4-service.md
+    title: "Step 4: The service"
+    status: open
+    since: 2026-11-04
+
+  # RCB-Runtime v1.1.1, README.md "Security Model".
+  - id: KI-4
+    component: runtime
+    summary: No authentication. The command port (29000) and the real-time port (30001) check only the sender's IP
+      address, which can be faked; the dashboard (8081) has no login; the telemetry goes to every device on the subnet.
+    workaround: Run the robot on an isolated network, the robot and its control PC only. Never open ports 8081, 29000
+      or 30001 to a shared network or the internet.
+    page: rcb/05-software-setup/step-5-network.md
+    title: "Step 5: Network"
+    status: open
+    since: 2026-11-04
+
+  # RCB-Runtime v1.1.1, CHANGELOG.md 0.9.0 "Known limitations" and README.md "Hardware versions"; hardware/control_box.py;
+  # config/system.xml.
+  - id: KI-5
+    component: runtime
+    summary: The mainboard does not report its version. The runtime takes it from `<pcb_version>` in
+      `config/system.xml`, and that number decides which E-stop channels it reads.
+    workaround: Set `<pcb_version>` to the version on the board's label.
+    page: rcb/02-safety/emergency-stop.md#pcb-version
+    title: The board's version
+    status: open
+    since: 2026-11-04
+
+  # RCB-Runtime v1.1.1, hardware/control_box.py (PCB_CAPABILITIES), hardware/gpio_handler.py, docs/pin_map.md.
+  - id: KI-6
+    component: control_box_pcb
+    summary: E-stop channel 2 (terminals E1 and E3) always reads pressed, a fault in the board's layout. The runtime
+      reads channel 1 only, so a button on channel 2 alone stops nothing, and the channels are not cross-checked.
+    workaround: Connect the E-stop button to E-Stop 1, terminals E2 and E4.
+    page: rcb/02-safety/emergency-stop.md#the-two-channels
+    title: The two E-stop channels
+    status: open
+    since: 2026-11-04
+
+  # PAR6-Collaborative-Robot-Arm, beta_guide.md "Beta RCB Mainboard - What to Expect".
+  - id: KI-7
+    component: beta_mainboard
+    summary: The beta boards carry hand changes that correct faults in their layout, all made before shipping. The
+      relay K1 had the wrong footprint and was closed at power-on; Q1, D11 and D12 need jumper wires; R63 is changed
+      to 1.47 kΩ; two E-stop pins are joined across the two E-stop connectors; some traces are cut.
+    workaround: Leave the cut traces and the jumper wires as they are; do not remove or redo them.
+    page: par6/cad-files.md#the-arm-cad-and-build-files
+    title: Downloads and files, the beta guide
+    status: open
+    since: 2026-11-04

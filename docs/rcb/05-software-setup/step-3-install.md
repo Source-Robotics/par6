@@ -2,8 +2,8 @@
 
 !!! warning "Not yet repeated on a clean machine"
     The installation follows how the reference robot was set up. A package the robot needs may still be missing from
-    `requirements.txt`; [Step 4](step-4-service.md)'s check imports every package the runtime needs and names a
-    missing one.
+    `requirements.txt`; [Step 4](step-4-service.md)'s check imports the runtime's main packages and names any that
+    fail. The faults known so far: [Known issues](../../par6/09-troubleshooting/known-issues.md).
 
 ## 1. Python 3.11 as python3 { #python-311 }
 

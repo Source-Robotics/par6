@@ -75,6 +75,8 @@ hooks:
   # command rules and error catalog (api_src/, copied from the runtime's release tag by tools/sync_runtime.py)
   # and docs/includes/per_move_settings.yml. See BUILDING_THE_REFERENCE.md.
   - hooks/command_pages.py
+  # The known issues table, from known_issues.yml (the PAR6 manual's Troubleshooting > Known issues).
+  - hooks/known_issues.py
   # Captions: a standalone picture (a light/dark pair counts once) becomes "Figure 3.2: <alt text>", numbered per
   # chapter in nav order; a raw <figure>'s caption gets its number too. After command_pages.py, whose pages it numbers.
   - hooks/figures.py
@@ -285,6 +287,7 @@ nav:
               - par6/09-troubleshooting/index.md
               - Symptoms and causes: par6/09-troubleshooting/by-symptom.md
               - Homing failures: par6/09-troubleshooting/homing-failures.md
+              - Known issues: par6/09-troubleshooting/known-issues.md
               - Getting help: par6/09-troubleshooting/support.md
           - 10. Transport, storage and disposal: par6/10-decommissioning.md
       - Build guide:

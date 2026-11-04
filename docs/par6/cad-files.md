@@ -17,7 +17,7 @@ versions come from one file, `versions.yml`, so this page changes with them; whi
 | Robot models: URDF and MuJoCo, PAR6 with each tool | main branch | [robot_descriptions: PAR6](https://github.com/Source-Robotics/robot_descriptions/blob/main/guides/par6.md) | [Robot models & simulation](../simulation/models.md) |
 
 The version links open the files at exactly that release. The mainboard firmware and the robot models have no
-release these pages follow: use their main branch.
+release these pages follow: use their main branch. Known faults are on [Known issues](09-troubleshooting/known-issues.md).
 
 ## The arm: CAD and build files
 

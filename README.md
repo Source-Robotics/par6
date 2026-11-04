@@ -120,6 +120,15 @@ pictures, pictures inside a paragraph and the Dev Lab tab are left alone. The ro
 robot model in [robot_descriptions](https://github.com/Source-Robotics/robot_descriptions), each in a light and a dark
 version.
 
+## Known issues
+
+**The known faults of the runtime and the control box are in `known_issues.yml`, never typed into a page.**
+`hooks/known_issues.py` writes them into the PAR6 manual's *Troubleshooting → Known issues* page
+(`<!-- known-issues -->`), or one component's into any page (`<!-- known-issues: runtime -->`). Each issue names the
+page that describes it; a malformed issue or a missing page stops the build. An issue goes in only when it can be
+pointed to in the code, the docs or the repositories. When `runtime.tag` changes, check the runtime's issues against
+the new release and set the runtime component's version to it: the build check fails until then.
+
 ## Contributing
 
 A small fix can be made from the browser: every page ends with a link that opens it for editing on GitHub. For

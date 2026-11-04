@@ -7,7 +7,8 @@ They follow the runtime's own setup list, in its
 
 !!! warning "Not yet repeated on a clean machine"
     The installation is written from how the reference robot was set up. It has not been repeated from scratch on a
-    clean Pi, so a step can still be missing. Do every check before you go on to the next step.
+    clean Pi, so a step can still be missing. Do every check before you go on to the next step. The faults known so
+    far are on [Known issues](../../par6/09-troubleshooting/known-issues.md).
 
 ## In this chapter
 
