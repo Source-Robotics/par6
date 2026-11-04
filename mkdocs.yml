@@ -136,8 +136,6 @@ extra:
       link: https://www.linkedin.com/in/petar-crnjak-009b43180/
     - icon: fontawesome/brands/discord
       link: https://discord.gg/prjUvjmGpZ
-    - icon: fontawesome/brands/patreon
-      link: https://www.patreon.com/PCrnjak
   # The version selector in the header (built by mike: one entry per deployed runtime minor + "latest").
   version:
     provider: mike
