@@ -1,10 +1,19 @@
 """Write the version facts of versions.yml into the pages (versioning step V6, 2026-10-22).
 
-Two placeholders, each replaced when the site is built:
+Five placeholders, each replaced when the site is built:
 
     <!-- doc-meta: KEY -->      a manual's version box, on its landing page: document number, runtime version (the
                                 software guides), revision, publication date, what it applies to
     <!-- documents-table -->    the list of every document, on every About page
+    <!-- version: COMPONENT -->      a component's version in running text or a command: its tag without the
+                                leading v (v1.1.1 is written 1.1.1)
+    <!-- version-url: COMPONENT -->  the address of the component's files at its tag, {repository}/tree/{tag};
+                                with `release_page: true`, its release page {repository}/releases/tag/{tag}
+                                (where an image is downloaded)
+    <!-- version-link: COMPONENT --> a link to that address with the version as its text
+
+COMPONENT is a top-level entry of versions.yml with a repository and a tag (runtime, os_image), or GROUP.KEY for
+one inside a group: the same syntax as PAROL-docs' hook (2026-11-02), whose downloads page these serve too.
 
 The facts live in versions.yml only. A malformed or missing fact, or an unknown manual, stops the build: a version
 on a page is never guessed. Registered in mkdocs.yml under `hooks:`.
@@ -20,6 +29,7 @@ from mkdocs.exceptions import PluginError
 
 META_RE = re.compile(r"<!--\s*doc-meta:\s*([A-Za-z0-9_-]+)\s*-->")
 TABLE_RE = re.compile(r"<!--\s*documents-table\s*-->")
+COMP_RE = re.compile(r"<!--\s*version(-url|-link)?:\s*([A-Za-z0-9_-]+)(?:\.([A-Za-z0-9_-]+))?\s*-->")
 REQUIRED = ("number", "title", "revision", "status", "covers")
 
 _facts: dict = {}
@@ -89,6 +99,30 @@ def documents_table(data: dict) -> str:
             "*Support → Versions & compatibility*, together with each part's release notes.")
 
 
+def component(group: str, key, data: dict) -> dict:
+    """A top-level entry (runtime, os_image) or GROUP.KEY, with a repository and a tag. Unknown names stop the build."""
+    comp = data.get(group) if key is None else (data.get(group) or {}).get(key)
+    name = group + (f".{key}" if key else "")
+    if not isinstance(comp, dict) or not comp.get("repository") or not comp.get("tag") or group == "manuals":
+        raise PluginError(f"versions.yml: no {name} with a repository and a tag for <!-- version: {name} -->")
+    return comp
+
+
+def version_text(comp: dict) -> str:
+    tag = str(comp["tag"])
+    return tag[1:] if re.fullmatch(r"v\d.*", tag) else tag
+
+
+def version_placeholder(kind, group: str, key, data: dict) -> str:
+    """<!-- version: ... -->, <!-- version-url: ... --> and <!-- version-link: ... -->."""
+    comp = component(group, key, data)
+    if not kind:
+        return version_text(comp)
+    repo = str(comp["repository"]).rstrip("/")
+    url = f"{repo}/releases/tag/{comp['tag']}" if comp.get("release_page") else f"{repo}/tree/{comp['tag']}"
+    return url if kind == "-url" else f"[{version_text(comp)}]({url})"
+
+
 def on_config(config):
     global _facts
     _facts = load(Path(config.config_file_path).parent / "versions.yml")
@@ -98,4 +132,5 @@ def on_config(config):
 
 def on_page_markdown(markdown, page, config, files):
     markdown = META_RE.sub(lambda m: meta_block(m.group(1), _facts), markdown)
+    markdown = COMP_RE.sub(lambda m: version_placeholder(m.group(1), m.group(2), m.group(3), _facts), markdown)
     return TABLE_RE.sub(lambda m: documents_table(_facts), markdown)

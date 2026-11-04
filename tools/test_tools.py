@@ -89,6 +89,37 @@ check("A8 the shipped versions.yml loads", hook.load(ROOT / "versions.yml")["doc
 check("A9 every placeholder in the docs names a manual of versions.yml",
       all(k in hook.load(ROOT / "versions.yml")["manuals"]
           for p in (ROOT / "docs").rglob("*.md") for k in hook.META_RE.findall(p.read_text(encoding="utf-8"))))
+IMG_YML = GOOD + "os_image: {repository: https://x/img, tag: 24.04_rt, release_page: true}\n"
+idata, _ = load_text(IMG_YML)
+hook._facts = idata
+page = hook.on_page_markdown("v<!-- version: runtime --> [r](<!-- version-url: runtime -->/docs) "
+                             "<!-- version-link: runtime --> [i](<!-- version-url: os_image -->)", None, None, None)
+check("A10 version is the tag without its v, version-url the files at the tag, version-link a link to them; an image "
+      "with release_page: true links to its release page",
+      page == "v0.9.0 [r](x/tree/v0.9.0/docs) [0.9.0](x/tree/v0.9.0) [i](https://x/img/releases/tag/24.04_rt)", page)
+for bad in ("<!-- version: firmware -->", "<!-- version-url: manuals.prog -->", "<!-- version-link: runtime.tag -->"):
+    try:
+        hook.on_page_markdown(bad, None, None, None)
+        raised = False
+    except PluginError:
+        raised = True
+    check(f"A11 refused: {bad}, which names no component with a repository and a tag", raised)
+shipped = hook.load(ROOT / "versions.yml")
+named = {(m[1], m[2] or None) for p in (ROOT / "docs").rglob("*.md")
+         for m in hook.COMP_RE.findall(p.read_text(encoding="utf-8"))}
+bad = []
+for group, key in named:
+    try:
+        hook.component(group, key, shipped)
+    except PluginError as exc:
+        bad.append(str(exc))
+check("A12 every version placeholder in the docs names a component of the shipped versions.yml", named and not bad,
+      bad)
+compat = (ROOT / "docs" / "includes" / "generated" / "compatibility.md").read_text(encoding="utf-8")
+row = next((line for line in compat.splitlines() if line.startswith(f"| {shipped['runtime']['tag'][1:]} |")), "")
+image = re.search(r"Ubuntu ([\d.]+) LTS, kernel ([\w.-]+)", row)
+check("A13 the OS image of versions.yml is the one the compatibility table lists for this runtime",
+      image is not None and all(part in str(shipped["os_image"]["tag"]) for part in image.groups()), row)
 
 # ---------------------------------------------------------------- the sync tool
 check("B1 esc: an XML name stays visible, no emphasis, no table break",

@@ -49,10 +49,13 @@ selector in the site's header switches between them. The versions are built with
 
 - `docs_version`: the runtime's `MAJOR.MINOR` these pages describe, which is also the name the version is published under
 - `runtime.tag`: the runtime release the generated pages come from
+- `os_image`: the operating system image of the control box's Raspberry Pi, the one that runtime release is tested on
 - one entry per manual: document number, title, revision, status, publication date, what it applies to
 
-`hooks/versions.py` writes these into every manual's version box and into the list of documents on every About
-page. A malformed or missing fact stops the build.
+`hooks/versions.py` writes these into every manual's version box, into the list of documents on every About page,
+and into the downloads page and the setup steps: `<!-- version: runtime -->` is the version (`1.1.1`),
+`<!-- version-url: runtime -->` the files at its tag, `<!-- version-link: runtime -->` a link to them with the version
+as its text. A malformed or missing fact, or a placeholder that names no component, stops the build.
 
 **Some pages are generated from the runtime repository.** They are the compatibility table, the runtime release
 notes, the error and event codes, and the telemetry tags. Their content is in `docs/includes/generated/`. Never edit

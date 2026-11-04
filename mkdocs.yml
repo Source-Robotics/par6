@@ -307,7 +307,7 @@ nav:
           - Hardware revisions: par6/appendices/hardware-revisions.md
       - Resources:
           - Glossary: par6/terminology.md
-          - CAD and downloads: par6/cad-files.md
+          - Downloads and files: par6/cad-files.md
 
   - Control Box:
       - rcb/index.md
@@ -386,7 +386,7 @@ nav:
           - Contributing and releases: rcb/developer/contributing.md
       - Resources:
           - Glossary: rcb/terminology.md
-          - CAD and downloads: rcb/cad-files.md
+          - Downloads and files: rcb/cad-files.md
 
   - Programming:
       - programming/index.md
