@@ -42,7 +42,7 @@ The latest files, on the main branch of the
 | What | Where |
 |---|---|
 | Enclosure and printed parts (STEP) | [STEP files](https://github.com/Source-Robotics/RCB-Robot-Control-Box/tree/main/STEP%20files) |
-| Bill of materials | [BOM](https://github.com/Source-Robotics/RCB-Robot-Control-Box/blob/main/BOM/BOM.md) |
+| Bill of materials | [BOM](https://github.com/Source-Robotics/RCB-Robot-Control-Box/tree/main/BOM) |
 | Building the cables, the print table | [Assembly manual](https://github.com/Source-Robotics/RCB-Robot-Control-Box/tree/main/Assembly%20manual) |
 | Assembly video | [The control box](https://youtu.be/qAzd839ixuw) |
 | The connector panel's pin map: every terminal, Pi pin and signal | [pin_map.md](<!-- version-url: runtime -->/docs/pin_map.md), in the runtime at <!-- version-link: runtime --> |
