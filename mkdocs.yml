@@ -128,12 +128,14 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/Source-Robotics
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/@source-robotics
     - icon: fontawesome/brands/instagram
-      link: https://www.instagram.com/5arcrnjak/
+      link: https://www.instagram.com/source_robotics/
     - icon: fontawesome/brands/x-twitter
       link: https://twitter.com/SourceRobotics
     - icon: fontawesome/brands/linkedin
-      link: https://www.linkedin.com/in/petar-crnjak-009b43180/
+      link: https://www.linkedin.com/company/source-robotics
     - icon: fontawesome/brands/discord
       link: https://discord.gg/prjUvjmGpZ
     - icon: fontawesome/brands/tiktok
