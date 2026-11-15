@@ -289,11 +289,13 @@ nav:
           - Assembly: par6/building/mechanical-assembly.md
           - Electronics and cabling: par6/building/electronics-wiring.md
           - Drive setup and firmware: par6/building/motor-drivers.md
-          - "Step 1: The control box and the configuration": par6/building/step-1-control-box.md
-          - "Step 2: Every drive on the bus": par6/building/step-2-drives.md
-          - "Step 3: E-stop, buttons and I/O": par6/building/step-3-io.md
+          - The first-run check: par6/building/first-run-check.md
+          - "Step 1: The Pi and the configuration": par6/building/step-1-control-box.md
+          - "Step 2: Power and every drive on the bus": par6/building/step-2-drives.md
+          - "Step 3: E-stop, buttons, I/O and the Hall sensor": par6/building/step-3-io.md
           - "Step 4: Joint test moves": par6/building/step-4-joint-test.md
-          - "Step 5: First homing and calibration": par6/building/step-5-homing.md
+          - "Step 5: The first homing": par6/building/step-5-homing.md
+          - "Step 6: The homed arm": par6/building/step-6-homed-arm.md
       - Appendix:
           - EMC test results: par6/appendices/emc-test-results.md
           - Letter of volatility: par6/appendices/letter-of-volatility.md
